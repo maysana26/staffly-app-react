@@ -1,0 +1,266 @@
+/* Base Canvas Frame Layout Box Background */
+.dashboard-page-content {
+    background-color: #f8fafc;
+    width: 100%;
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Centralizing Main Box Content Sheet Panel */
+.dashboard-container {
+    max-width: 1000px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Header Grid Typography Styles */
+.dashboard-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dashboard-main-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+.dashboard-subtitle {
+    font-size: 15px;
+    color: #4b5563;
+    margin: 0;
+}
+
+/* Performance Metrics Summary Ribbon Cards Row grid layout */
+.stats-grid-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.stat-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1;
+}
+
+/* Text Colors matching specific numerical meanings */
+.text-dark {
+    color: #111827;
+}
+
+.text-green {
+    color: #10b981;
+}
+
+.text-orange {
+    color: #f97316;
+}
+
+.rating-display {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.inline-star {
+    transform: translateY(-2px);
+}
+
+/* Main Dashboard Event Block Modules Shell Layout */
+.dashboard-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.section-title-label {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+/* Vertical Core Container List Stream */
+.events-vertical-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Singular Composite Event Display Structure Box */
+.event-item-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.event-main-info-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Absolute Square Dark Background Image Block Placeholder Mockup */
+.event-thumbnail-box {
+    width: 90px;
+    height: 90px;
+    border-radius: 12px;
+    background-color: #1f2937;
+    background-image: radial-gradient(circle at center, #374151 0%, #111827 100%);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.thumbnail-dark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+/* Component Column Segment Configurations */
+.event-details-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.event-card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+.event-card-role {
+    font-size: 13px;
+    color: #4b5563;
+    margin: 0;
+}
+
+.event-card-role span {
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Meta Labels Inline Info Spans Row Elements */
+.event-meta-inline-info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 4px;
+}
+
+.meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #f97316;
+    /* Theme Accent Orange Highlight Info items */
+}
+
+.meta-item.text-muted {
+    color: #6b7280;
+}
+
+/* Action Control Column Blocks */
+.event-actions-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+/* Dynamic State Capsules */
+.status-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 9999px;
+}
+
+.status-pill-badge.accepted {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-pill-badge.pending {
+    background-color: #ffedd5;
+    color: #9a3412;
+}
+
+/* Outline Cancel Target Action Label Box Trigger */
+.btn-cancel-application {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #ffffff;
+    border: 1px solid #fca5a5;
+    color: #dc2626;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-cancel-application:hover {
+    background-color: #fef2f2;
+    border-color: #ef4444;
+}
+
+/* Banner Inline Glow Bottom Text Card Row Alert Notifications */
+.event-status-alert-banner {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #166534;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

@@ -1,0 +1,247 @@
+/* Auth.css */
+.auth-page-wrapper {
+    background-color: #f8fafc;
+    /* This fixes the black background */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.logo-container {
+    background-color: #ff6b00;
+    padding: 12px;
+    border-radius: 14px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.2);
+}
+
+.welcome-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #64748b;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.auth-card {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    padding: 40px;
+    border-radius: 28px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+}
+
+.input-section {
+    margin-bottom: 24px;
+}
+
+.input-section label {
+    display: block;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.input-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.field-icon {
+    position: absolute;
+    left: 15px;
+    color: #94a3b8;
+}
+
+.input-field input {
+    width: 100%;
+    padding: 14px 14px 14px 45px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+.input-field input:focus {
+    outline: none;
+    border-color: #ff6b00;
+    box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.checkbox-label {
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.forgot-link {
+    background: none;
+    border: none;
+    color: #ff6b00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.login-button {
+    width: 100%;
+    background-color: #ff6b00;
+    color: white;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.login-button:active {
+    transform: scale(0.98);
+}
+
+.footer-link {
+    text-align: center;
+    margin-top: 30px;
+    color: #64748b;
+    font-size: 15px;
+}
+
+.footer-link a {
+    color: #ff6b00;
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 5px;
+}
+
+.legal-text {
+    margin-top: 40px;
+    font-size: 12px;
+    color: #94a3b8;
+    text-align: center;
+}
+
+.legal-text span {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.signup-card {
+    max-width: 650px;
+    /* Wider for the two-column layout */
+}
+
+.role-selection-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.role-card {
+    border: 2px solid #f1f5f9;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: white;
+}
+
+.role-card.active {
+    border-color: #ff6b00;
+    background-color: #fffaf0;
+}
+
+.role-icon {
+    margin-bottom: 10px;
+    color: #94a3b8;
+}
+
+.role-card.active .role-icon {
+    color: #ff6b00;
+}
+
+.role-info strong {
+    display: block;
+    font-size: 16px;
+    color: #1e293b;
+}
+
+.role-info p {
+    font-size: 11px;
+    color: #64748b;
+    margin: 0;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.agreement-text {
+    font-size: 13px;
+    text-align: center;
+    color: #64748b;
+    margin: 20px 0;
+}
+
+.agreement-text span {
+    color: #ff6b00;
+    font-weight: 600;
+}
+
+/* For small screens, stack the grid */
+@media (max-width: 600px) {
+
+    .input-row,
+    .role-selection-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

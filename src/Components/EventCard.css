@@ -1,0 +1,94 @@
+/* EventCard.css */
+.event-card {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.event-image-container {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    /* Constrains image frames into exact layout spaces */
+    overflow: hidden;
+    background-color: #f8fafc;
+}
+
+.event-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Forces the image to fill the 220px frame cleanly without squishing */
+    transition: transform 0.3s ease;
+}
+
+.event-card:hover .event-img {
+    transform: scale(1.03);
+    /* Soft parallax pop when hovered */
+}
+
+.event-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.5px;
+    z-index: 2;
+}
+
+.badge-technology {
+    background-color: #ff6b00;
+}
+
+.badge-music {
+    background-color: #2563eb;
+}
+
+.badge-corporate {
+    background-color: #ff9f00;
+}
+
+.event-details {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.event-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+}
+
+.event-date-loc {
+    font-size: 13.5px;
+    color: #64748b;
+    margin: 0 0 20px 0;
+}
+
+.event-roles {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #c25100;
+    font-weight: 600;
+    margin-top: auto;
+    /* Pushes the roles tag to the exact bottom of the card content */
+}
+
+.role-pin {
+    color: #ff6b00;
+}

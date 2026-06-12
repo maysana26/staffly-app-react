@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Search, SlidersHorizontal, Calendar, MapPin, Users, ChevronDown } from "lucide-react";
+import { Search, SlidersHorizontal, Calendar, MapPin, Users, CheckCircle } from "lucide-react";
 import "./ExploreEvents.css";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
-
 
 const INITIAL_EVENTS = [
     {
@@ -86,7 +85,6 @@ const INITIAL_EVENTS = [
     }
 ];
 
-// Automatically compile a clean list of unique categories from the array above
 const CATEGORIES = ["All", ...new Set(INITIAL_EVENTS.map(event => event.category))];
 
 function ExploreEvents() {
@@ -94,7 +92,15 @@ function ExploreEvents() {
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
 
-    // Dynamic Multi-Filter Engine
+    // State to track registered event IDs dynamically
+    const [registeredEvents, setRegisteredEvents] = useState([]);
+
+    const handleRegister = (eventId, eventTitle) => {
+        if (registeredEvents.includes(eventId)) return;
+        setRegisteredEvents([...registeredEvents, eventId]);
+        alert(`Successfully applied for role openings at: ${eventTitle}!`);
+    };
+
     const filteredEvents = INITIAL_EVENTS.filter((event) => {
         const matchesSearch =
             event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -111,15 +117,12 @@ function ExploreEvents() {
         <div className="explore-container">
             <Navbar />
 
-            {/* Search Filter Hero Header */}
             <header className="explore-hero">
                 <div className="explore-hero-content">
                     <h1>Explore Events</h1>
                     <p>Find the perfect event opportunity for your skills</p>
 
-                    {/* Crucial style positioning layout wrapper */}
                     <div className="search-bar-wrapper" style={{ position: "relative" }}>
-
                         <div className="search-input-box">
                             <Search className="icon-search" size={18} />
                             <input
@@ -130,7 +133,6 @@ function ExploreEvents() {
                             />
                         </div>
 
-                        {/* Interactive Toggle Filter Trigger */}
                         <button
                             className={`filter-button ${selectedCategory !== "All" ? "active-filter" : ""}`}
                             onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
@@ -139,7 +141,6 @@ function ExploreEvents() {
                             <span>Filters {selectedCategory !== "All" ? `(${selectedCategory})` : ""}</span>
                         </button>
 
-                        {/* Floating Dropdown Component Selection Panel */}
                         {isFilterDropdownOpen && (
                             <div className="filter-dropdown-menu">
                                 <p className="dropdown-section-title">Filter by Category</p>
@@ -150,7 +151,7 @@ function ExploreEvents() {
                                             className={`category-option-btn ${selectedCategory === category ? "selected" : ""}`}
                                             onClick={() => {
                                                 setSelectedCategory(category);
-                                                setIsFilterDropdownOpen(false); // Close panel on pick
+                                                setIsFilterDropdownOpen(false);
                                             }}
                                         >
                                             {category}
@@ -163,7 +164,6 @@ function ExploreEvents() {
                 </div>
             </header>
 
-            {/* Main Events Cards Area */}
             <main className="explore-main-content">
                 <div className="results-counter">
                     Found {filteredEvents.length} {filteredEvents.length === 1 ? "event" : "events"}
@@ -184,60 +184,76 @@ function ExploreEvents() {
                             </button>
                         </div>
                     ) : (
-                        filteredEvents.map((event) => (
-                            <div key={event.id} className="wide-event-card">
-                                {/* Left Side Thumbnail */}
-                                <div className="wide-card-image-box">
-                                    <img src={event.image} alt={event.title} className="wide-event-img" />
-                                    <span className={`wide-card-badge ${event.badgeClass}`}>
-                                        {event.category}
-                                    </span>
-                                </div>
-
-                                {/* Right Side Context Details */}
-                                <div className="wide-card-details">
-                                    <h2 className="wide-event-title">{event.title}</h2>
-
-                                    <div className="wide-meta-row">
-                                        <div className="meta-item">
-                                            <Calendar size={14} className="meta-icon-cal" />
-                                            <span>{event.date}</span>
-                                        </div>
-                                        <div className="meta-item">
-                                            <MapPin size={14} className="meta-icon-pin" />
-                                            <span>{event.location}</span>
-                                        </div>
-                                        <div className="meta-item">
-                                            <Users size={14} className="meta-icon-users" />
-                                            <span>{event.filledStatus}</span>
-                                        </div>
+                        filteredEvents.map((event) => {
+                            const isRegistered = registeredEvents.includes(event.id);
+                            return (
+                                <div key={event.id} className="wide-event-card">
+                                    <div className="wide-card-image-box">
+                                        <img src={event.image} alt={event.title} className="wide-event-img" />
+                                        <span className={`wide-card-badge ${event.badgeClass}`}>
+                                            {event.category}
+                                        </span>
                                     </div>
 
-                                    <p className="wide-event-description">{event.description}</p>
+                                    <div className="wide-card-details">
+                                        <div className="wide-card-header-row">
+                                            <h2 className="wide-event-title">{event.title}</h2>
 
-                                    <div className="wide-roles-pills-box">
-                                        {event.roles.map((role, idx) => (
-                                            <span key={idx} className="role-pill-tag">
-                                                {role}
-                                            </span>
-                                        ))}
-                                        {event.hasMoreRoles && (
-                                            <span className="role-pill-tag tag-more">+1 more</span>
-                                        )}
+                                            {/* Action Applied/Register Button added matching the mockup schema */}
+                                            <button
+                                                type="button"
+                                                className={`card-action-register-btn ${isRegistered ? "registered-applied" : ""}`}
+                                                onClick={() => handleRegister(event.id, event.title)}
+                                                disabled={isRegistered}
+                                            >
+                                                {isRegistered ? (
+                                                    <>
+                                                        <CheckCircle size={14} /> Applied
+                                                    </>
+                                                ) : (
+                                                    "Register Now"
+                                                )}
+                                            </button>
+                                        </div>
+
+                                        <div className="wide-meta-row">
+                                            <div className="meta-item">
+                                                <Calendar size={14} className="meta-icon-cal" />
+                                                <span>{event.date}</span>
+                                            </div>
+                                            <div className="meta-item">
+                                                <MapPin size={14} className="meta-icon-pin" />
+                                                <span>{event.location}</span>
+                                            </div>
+                                            <div className="meta-item">
+                                                <Users size={14} className="meta-icon-users" />
+                                                <span>{event.filledStatus}</span>
+                                            </div>
+                                        </div>
+
+                                        <p className="wide-event-description">{event.description}</p>
+
+                                        <div className="wide-roles-pills-box">
+                                            {event.roles.map((role, idx) => (
+                                                <span key={idx} className="role-pill-tag">
+                                                    {role}
+                                                </span>
+                                            ))}
+                                            {event.hasMoreRoles && (
+                                                <span className="role-pill-tag tag-more">+1 more</span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
+                            );
+                        })
                     )}
                 </div>
             </main>
 
             <Footer />
         </div>
-
-
-
     );
-
 }
+
 export default ExploreEvents;

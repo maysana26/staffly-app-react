@@ -1,0 +1,451 @@
+/* Core Layout Shell Frame Box Canvas Background */
+.admin-page-canvas {
+    background-color: #f8fafc;
+    width: 100%;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Deep Space Ambient Blue Gradient Upper Strip Header Frame */
+.admin-hero-banner {
+    background: radial-gradient(circle at 85% 15%, #1e3a8a 0%, #0f172a 100%);
+    width: 100%;
+    padding: 60px 0 100px 0;
+}
+
+.admin-hero-container {
+    max-width: 1140px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+.admin-hero-title {
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.admin-hero-subtitle {
+    color: #94a3b8;
+    font-size: 16px;
+    margin: 8px 0 0 0;
+}
+
+/* Overlay Document Sheet Center Card Assembly Wrapper block */
+.admin-sheet-wrapper {
+    max-width: 1140px;
+    width: 100%;
+    margin: -60px auto 60px auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+.admin-sheet-card {
+    background-color: #ffffff;
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+    padding: 32px;
+    box-sizing: border-box;
+}
+
+/* Local Inner Tab List Selector Link Bar tracks */
+.admin-tabs-row {
+    display: flex;
+    gap: 32px;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 32px;
+}
+
+.admin-tab-btn {
+    background: none;
+    border: none;
+    font-size: 15px;
+    font-weight: 500;
+    color: #64748b;
+    padding: 0 0 14px 0;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.admin-tab-btn:hover {
+    color: #f97316;
+}
+
+.admin-tab-btn.active {
+    color: #f97316;
+    font-weight: 600;
+}
+
+.admin-tab-btn.active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2.5px;
+    background-color: #f97316;
+    border-radius: 2px;
+}
+
+/* Inner Segment Typography Controls Layout */
+.subtab-content-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.subtab-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.tab-section-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+}
+
+/* Custom Orange CTA Event Creator Button Field Box */
+.btn-create-event {
+    background-color: #ff6a00;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 106, 0, 0.25);
+    transition: background-color 0.2s ease;
+}
+
+.btn-create-event:hover {
+    background-color: #e05d00;
+}
+
+/* Overview Section Metric Card Block Layout Rows */
+.admin-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.analytics-card {
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid transparent;
+}
+
+.blue-variant {
+    background-color: #eff6ff;
+    border-color: #dbeafe;
+}
+
+.orange-variant {
+    background-color: #fff7ed;
+    border-color: #ffedd5;
+}
+
+.purple-variant {
+    background-color: #faf5ff;
+    border-color: #f3e8ff;
+}
+
+.green-variant {
+    background-color: #f0fdf4;
+    border-color: #dcfce7;
+}
+
+.analytics-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blue-icon-bg {
+    background-color: #dbeafe;
+}
+
+.orange-icon-bg {
+    background-color: #ffedd5;
+}
+
+.purple-icon-bg {
+    background-color: #f3e8ff;
+}
+
+.green-icon-bg {
+    background-color: #dcfce7;
+}
+
+.analytics-text-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.analytics-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.analytics-number {
+    font-size: 26px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 2px 0 0 0;
+}
+
+/* Overview Recent Log Rows Stack Layout */
+.admin-activity-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.activity-stack-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.activity-log-strip {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.log-left-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.log-main-announcement {
+    font-size: 14px;
+    color: #334155;
+    margin: 0;
+}
+
+.highlight-text-bold {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.log-sub-role-label {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+}
+
+.log-right-timestamp {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+/* Clean Matrix Tables Core Responsive Frame Standard */
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admin-dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 14px;
+}
+
+.admin-dashboard-table th {
+    color: #475569;
+    font-weight: 600;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #ffffff;
+}
+
+.admin-dashboard-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.text-neutral-dark {
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.text-neutral-muted {
+    color: #64748b;
+}
+
+/* Composite Grid Item Component Blocks Media cells */
+.table-media-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.table-event-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    flex-shrink: 0;
+}
+
+.table-avatar-img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.table-cell-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cell-main-title {
+    font-weight: 600;
+    color: #0f172a;
+    font-size: 14px;
+}
+
+.cell-sub-info {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.rating-inline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 500;
+    color: #475569;
+}
+
+/* Data Status Capsules and Tags */
+.badge-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.category-pill {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.status-pill-accepted {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.status-pill-pending {
+    background-color: #fef9c3;
+    color: #a16207;
+}
+
+/* --- ACTION TRIGGER CONTROL BUTTON COLORS --- */
+.table-actions-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.action-icon-btn {
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.action-icon-btn:active {
+    transform: scale(0.92);
+}
+
+/* View Button - Classic Corporate Blue State */
+.view-btn {
+    color: #2563eb;
+}
+
+.view-btn:hover {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+}
+
+/* Edit Button - Slate/Muted Blue Charcoal State */
+.edit-btn {
+    color: #475569;
+}
+
+.edit-btn:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+}
+
+/* Delete Button - Danger Red State */
+.delete-btn {
+    color: #dc2626;
+}
+
+.delete-btn:hover {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+/* Approve Button - Success Emerald Green State */
+.approve-btn {
+    color: #16a34a;
+}
+
+.approve-btn:hover {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+/* Reject Button - Deep Alizarin Crimson/Red State */
+.reject-btn {
+    color: #ea580c;
+}
+
+.reject-btn:hover {
+    background-color: #ffedd5;
+    color: #c2410c;
+}

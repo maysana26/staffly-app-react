@@ -1,0 +1,335 @@
+/* ==========================================================================
+   1. GLOBAL & CONTAINER WORKSPACE CONFIGURATION
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Forces the entire page to center content down the middle of the screen */
+.profile-page-wrapper {
+    background-color: #f8fafc;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Forces the Navbar component to stretch fully across the top width */
+.profile-page-wrapper>nav,
+.profile-page-wrapper .navbar,
+.profile-page-wrapper header {
+    width: 100%;
+}
+
+/* The structural bounding box for your central profile content card */
+.profile-main-container {
+    flex: 1;
+    max-width: 860px;
+    width: 100%;
+    margin: 40px auto 80px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   2. CENTRAL PROFILE CARD STRUCTURE
+   ========================================================================== */
+.profile-card-cardboard {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    border: 1px solid #f1f5f9;
+}
+
+/* Decorative Brand Orange Banner Row */
+.profile-banner-hero {
+    background: linear-gradient(135deg, #ff7a00 0%, #ff5100 100%);
+    height: 140px;
+    width: 100%;
+}
+
+/* User Identity Bio Details Layout */
+.profile-header-details {
+    display: flex;
+    padding: 0 40px;
+    margin-top: -45px;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.profile-avatar-frame {
+    width: 110px;
+    height: 110px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 4px solid #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+}
+
+.profile-avatar-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-meta-identity {
+    flex: 1;
+    padding-bottom: 8px;
+}
+
+.identity-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.profile-user-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+.profile-user-email {
+    font-size: 14px;
+    color: #64748b;
+    margin: 4px 0 0 0;
+}
+
+.btn-edit-profile {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-edit-profile:hover {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+/* ==========================================================================
+   3. METRIC SUMMARY CARDS GRID
+   ========================================================================== */
+.metrics-summary-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 0 40px;
+    margin-bottom: 35px;
+}
+
+.metric-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-sizing: border-box;
+}
+
+.box-rating {
+    background-color: #fff7ed;
+}
+
+.box-events {
+    background-color: #eff6ff;
+}
+
+.box-member {
+    background-color: #faf5ff;
+}
+
+.metric-icon-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circle-rating {
+    background-color: #ffedd5;
+}
+
+.circle-events {
+    background-color: #dbeafe;
+}
+
+.circle-member {
+    background-color: #f3e8ff;
+}
+
+.metric-txt-stack {
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-lbl {
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.metric-val {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-top: 1px;
+}
+
+.stars-indicator-row {
+    display: flex;
+    gap: 2px;
+    margin-top: 4px;
+}
+
+/* ==========================================================================
+   4. PROFILE SECTIONS CONTENT BLOCKS (About, Skills, Experience)
+   ========================================================================== */
+.profile-content-body {
+    padding: 0 40px 40px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.body-data-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.body-block-heading {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 14px 0;
+}
+
+.heading-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.heading-icon-award {
+    color: #ff6b00;
+}
+
+.body-block-paragraph {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #475569;
+    margin: 0;
+}
+
+/* Skills Badges Container Grid */
+.profile-skills-flexbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.profile-skill-badge {
+    background-color: #f1f5f9;
+    color: #475569;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Experience Cards Tracking List */
+.experience-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.history-card-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+
+.history-left-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.history-event-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+}
+
+.history-event-role {
+    font-size: 13px;
+    color: #64748b;
+    margin: 4px 0 8px 0;
+}
+
+.history-meta-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.history-right-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #fff7ed;
+    color: #c25100;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    border: 1px solid #ffedd5;
+}
+
+/* ==========================================================================
+   5. RESPONSIVE MOBILE OVERRIDES
+   ========================================================================== */
+@media (max-width: 768px) {
+    .metrics-summary-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .profile-header-details {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .identity-title-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+}

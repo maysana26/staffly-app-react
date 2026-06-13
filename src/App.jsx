@@ -9,7 +9,7 @@ import './App.css'
 import MyEvents from './Pages/MyEvents';
 import AdminDashboard from './Pages/AdminDashboard';
 import CreateEvent from './Pages/CreateEvent';
-
+import EditEvent from './Pages/EditEvent';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -39,8 +39,10 @@ function App() {
         {/* STANDALONE CREATE EVENT ROUTE (Moved outside the block!) */}
         <Route path="/admindashboard/createevent" element={<CreateEvent />} />
 
-        <Route path="/admindashboard/viewevent/:id" element={<ViewEvent />} />
+        {/* <Route path="/admindashboard/viewevent/:id" element={<ViewEvent />} /> */}
+        {/* Add this temporary route right underneath your original one */}
         <Route path="/admindashboard/editevent/:id" element={<EditEvent />} />
+        <Route path="/test-edit" element={<EditEvent />} /> {/* <-- TEMPORARY VIEW PATH */}
 
         {/* 3. Redirect: If the user goes to the base URL (/), send them to Login */}
         <Route path="/" element={<Navigate to="/login" />} />

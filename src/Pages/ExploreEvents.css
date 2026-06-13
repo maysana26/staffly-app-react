@@ -1,0 +1,376 @@
+/* ExploreEvents.css */
+.explore-container {
+    background-color: #f8fafc;
+    min-height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.explore-container *,
+.explore-container *::before,
+.explore-container *::after {
+    box-sizing: inherit;
+}
+
+/* Header Banner Styling with Blue Highlight Glow Reflection */
+.explore-hero {
+    background:
+        radial-gradient(circle at 15% 75%, rgba(37, 99, 235, 0.45) 0%, rgba(30, 58, 138, 0.25) 35%, transparent 70%),
+        linear-gradient(135deg, #0b1329 0%, #111c3a 50%, #16254c 100%);
+    padding: 50px 40px;
+    width: 100%;
+    border-bottom: 1px solid #1e293b;
+}
+
+.explore-hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.explore-hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.5px;
+}
+
+.explore-hero-content p {
+    font-size: 1.05rem;
+    color: #94a3b8;
+    margin: 0 0 28px 0;
+}
+
+/* Interactive Search Bar Panel Row Layout */
+.search-bar-wrapper {
+    display: flex;
+    gap: 16px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.search-input-box {
+    position: relative;
+    flex-grow: 1;
+}
+
+.icon-search {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    pointer-events: none;
+}
+
+.search-input-box input {
+    width: 100%;
+    background-color: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 14px 16px 14px 48px;
+    color: #ffffff;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.search-input-box input:focus {
+    background-color: rgba(30, 41, 59, 0.9);
+    border-color: #ff6b00;
+    box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.2);
+}
+
+.search-input-box input::placeholder {
+    color: #64748b;
+}
+
+/* Option Filter Activation Control Button */
+.filter-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    padding: 0 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.filter-button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Content Area Structural Frame Wrapper */
+.explore-main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 40px 80px 40px;
+    width: 100%;
+}
+
+.results-counter {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 500;
+    margin-bottom: 24px;
+}
+
+/* Grid Matrix Layout splitting into 2 matching halves perfectly adjacent */
+.explore-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    width: 100%;
+}
+
+/* Horizontal Split Detail Structure */
+.wide-event-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    display: flex;
+    height: auto;
+    min-height: 290px;
+}
+
+/* Left Side Thumbnail Housing box constraints */
+.wide-card-image-box {
+    position: relative;
+    width: 200px;
+    min-width: 200px;
+    height: 100%;
+    background-color: #f1f5f9;
+}
+
+.wide-event-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Absolute Tags Placement */
+.wide-card-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+}
+
+/* Hex values extracted precisely from your badges mockup screenshots */
+.cat-tech {
+    background-color: #ff6b00;
+}
+
+.cat-music {
+    background-color: #ff5100;
+}
+
+.cat-corporate {
+    background-color: #ff6b00;
+}
+
+.cat-business {
+    background-color: #ff7300;
+}
+
+.cat-sports {
+    background-color: #ff5100;
+}
+
+.cat-arts {
+    background-color: #ff5100;
+}
+
+/* Right Descriptive Text Housing Block Layout */
+.wide-card-details {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.wide-event-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 12px 0;
+    line-height: 1.3;
+}
+
+/* Metadata lists alignment tracking columns formatting row updates */
+.wide-meta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #475569;
+    font-weight: 500;
+}
+
+.meta-icon-cal {
+    color: #f97316;
+}
+
+.meta-icon-pin {
+    color: #f97316;
+}
+
+.meta-icon-users {
+    color: #f97316;
+}
+
+.wide-event-description {
+    font-size: 13.5px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+}
+
+/* Horizontal Sub-roles layout array blocks */
+.wide-roles-pills-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto;
+    /* Pushes layout systematically downwards matching baseline rows */
+}
+
+.role-pill-tag {
+    background-color: #f1f5f9;
+    color: #475569;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.tag-more {
+    background-color: #e2e8f0;
+    color: #334155;
+    cursor: pointer;
+}
+
+/* Responsive breakdowns formatting rows if screen view shrinks down */
+@media (max-width: 992px) {
+    .explore-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .wide-event-card {
+        flex-direction: column;
+    }
+
+    .wide-card-image-box {
+        width: 100%;
+        height: 180px;
+    }
+
+    .explore-hero {
+        padding: 40px 20px;
+    }
+
+    .explore-main-content {
+        padding: 30px 20px;
+    }
+}
+
+.explore-hero-content h1 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Add this line to match the Home page */
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.5px;
+}
+
+/* It's also a good idea to add it to the paragraph right below it just in case! */
+.explore-hero-content p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Add this line too */
+    font-size: 1.05rem;
+    color: #94a3b8;
+    margin: 0 0 28px 0;
+}
+
+/* Position dropdown relative to the bar wrapper layout box */
+.filter-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 280px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 16px;
+    z-index: 50;
+}
+
+.dropdown-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+}
+
+.category-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.category-option-btn {
+    text-align: left;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    background: transparent;
+    border: none;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.category-option-btn:hover {
+    background: #f1f5f9;
+}
+
+.category-option-btn.selected {
+    background: #eff6ff;
+    color: #2563eb;
+    font-weight: 600;
+}
+
+/* Optional styling indicator for active state */
+.filter-button.active-filter {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #f0f7ff;
+}

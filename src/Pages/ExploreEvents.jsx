@@ -4,6 +4,9 @@ import "./ExploreEvents.css";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 
+//added a register button
+
+
 const INITIAL_EVENTS = [
     {
         id: 1,

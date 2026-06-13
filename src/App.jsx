@@ -39,7 +39,7 @@ function App() {
         {/* STANDALONE CREATE EVENT ROUTE (Moved outside the block!) */}
         <Route path="/admindashboard/createevent" element={<CreateEvent />} />
 
-        {/* <Route path="/admindashboard/viewevent/:id" element={<ViewEvent />} /> */}
+        <Route path="/admindashboard/viewevent/:id" element={<ViewEvent />} />
         {/* Add this temporary route right underneath your original one */}
         <Route path="/admindashboard/editevent/:id" element={<EditEvent />} />
         <Route path="/test-edit" element={<EditEvent />} /> {/* <-- TEMPORARY VIEW PATH */}

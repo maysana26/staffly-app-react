@@ -1,17 +1,62 @@
 /* Container Layouts */
 .edit-event-container {
-    background-color: #0b1528;
-    /* Dark theme canvas background matching Staffly */
-    color: #ffffff;
+    background-color: #f8fafc;
+    /* Changed to match light workspace background background */
+    color: #1a154f;
     min-height: 100vh;
     font-family: 'Inter', system-ui, sans-serif;
-    padding-bottom: 60px;
+}
+
+/* Dark Space Top Header Hero Banner */
+.edit-event-hero {
+    background: radial-gradient(circle at 85% 15%, #1e3a8a 0%, #0f172a 100%);
+    width: 100%;
+    padding: 40px 0 100px 0;
+}
+
+.edit-event-hero-container {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+.back-dashboard-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.15s ease;
+}
+
+.back-dashboard-btn:hover {
+    color: #ffffff;
+}
+
+.edit-event-hero-title {
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.edit-event-hero-subtitle {
+    color: #94a3b8;
+    font-size: 15px;
+    margin: 6px 0 0 0;
 }
 
 /* Orange Global Admin Mode Bar */
 .admin-mode-banner {
     background-color: #ff6b00;
-    color: #ffffff;
+    color: #f7f7f7;
     text-align: center;
     padding: 10px 20px;
     font-size: 0.9rem;
@@ -20,37 +65,11 @@
 
 .edit-event-content {
     max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
-
-/* Breadcrumb Links */
-.back-link {
-    color: #a0aec0;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.95rem;
-    margin-bottom: 24px;
-    transition: color 0.2s;
-}
-
-.back-link:hover {
-    color: #ffffff;
-}
-
-/* Typography Headers */
-.edit-event-header h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin: 0 0 8px 0;
-}
-
-.edit-event-header p {
-    color: #a0aec0;
-    margin: 0 0 32px 0;
-    font-size: 1.05rem;
+    margin: -60px auto 60px auto;
+    /* Pulls form overlapping up into hero space */
+    padding: 0 24px 40px 24px;
+    position: relative;
+    box-sizing: border-box;
 }
 
 /* Form Container Blocks */
@@ -60,7 +79,8 @@
     border-radius: 12px;
     padding: 32px;
     margin-bottom: 28px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
 }
 
 .form-card h2 {
@@ -142,23 +162,24 @@
 }
 
 .add-role-btn {
-    background-color: #edf2f7;
-    color: #4a5568;
+    background-color: #ff6a00;
+    color: #ffffff;
     border: none;
     padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 500;
+    border-radius: 8px;
+    font-weight: 600;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 6px;
     font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(255, 106, 0, 0.2);
 }
 
 /* Nested Role Component Rows */
 .role-row-item {
-    background-color: #f7fafc;
-    border: 1px solid #edf2f7;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;

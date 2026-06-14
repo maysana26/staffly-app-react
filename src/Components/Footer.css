@@ -46,3 +46,30 @@
     box-shadow: 0 12px 24px -3px rgba(0, 0, 0, 0.25);
     background-color: #fffaf7;
 }
+
+.footer-bottom-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    /* Changed from 1140px to 100% to push items to the absolute edges */
+    margin: 40px auto 0 auto;
+    padding: 20px 10px 0 10px;
+    /* Reduced side padding so text safely hugs the far sides */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    /* Subtle divider lines */
+    box-sizing: border-box;
+    font-size: 13px;
+    color: #ffedd5;
+    /* Muted slate color for small text representation */
+}
+
+/* Responsive adjustment for small viewport stacks */
+@media (max-width: 768px) {
+    .footer-bottom-meta {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Search, SlidersHorizontal, Calendar, MapPin, Users, CheckCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Search, SlidersHorizontal, Calendar, MapPin, Users, CheckCircle, Clock, Edit3 } from "lucide-react";
 import "./ExploreEvents.css";
-import Footer from "../Components/Footer";
-import Navbar from "../Components/Navbar";
-
-//added a register button
-
+import Footer from "../Components/ApplicantFooter";
+import Navbar from "../Components/ApplicantNavbar";
+import AdminNavbar from "../Components/AdminNavbar";
+import AdminFooter from "../Components/AdminFooter";
 
 const INITIAL_EVENTS = [
     {
@@ -91,17 +91,40 @@ const INITIAL_EVENTS = [
 const CATEGORIES = ["All", ...new Set(INITIAL_EVENTS.map(event => event.category))];
 
 function ExploreEvents() {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
 
-    // State to track registered event IDs dynamically
+    const userRole = location.pathname.startsWith("/admin") ? "admin" : "applicant";
+
     const [registeredEvents, setRegisteredEvents] = useState([]);
 
-    const handleRegister = (eventId, eventTitle) => {
-        if (registeredEvents.includes(eventId)) return;
-        setRegisteredEvents([...registeredEvents, eventId]);
-        alert(`Successfully applied for role openings at: ${eventTitle}!`);
+    const [pendingEvents, setPendingEvents] = useState(() => {
+        const saved = localStorage.getItem("pendingEventIds");
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    useEffect(() => {
+        const pendingEventId = location.state?.pendingEventId;
+        if (pendingEventId !== undefined && pendingEventId !== null) {
+            const stringId = String(pendingEventId);
+            if (!pendingEvents.includes(stringId)) {
+                const updatedPending = [...pendingEvents, stringId];
+                setPendingEvents(updatedPending);
+                localStorage.setItem("pendingEventIds", JSON.stringify(updatedPending));
+            }
+        }
+    }, [location.state, pendingEvents]);
+
+    const handleActionClick = (eventId, eventTitle) => {
+        if (userRole === "admin") {
+            navigate(`/admindashboard/editevent/${eventId}`);
+        } else {
+            if (registeredEvents.includes(eventId) || pendingEvents.includes(String(eventId))) return;
+            navigate(`/register/${eventId}`, { state: { eventTitle } });
+        }
     };
 
     const filteredEvents = INITIAL_EVENTS.filter((event) => {
@@ -118,7 +141,7 @@ function ExploreEvents() {
 
     return (
         <div className="explore-container">
-            <Navbar />
+            {userRole === "admin" ? <AdminNavbar /> : <Navbar />}
 
             <header className="explore-hero">
                 <div className="explore-hero-content">
@@ -189,6 +212,8 @@ function ExploreEvents() {
                     ) : (
                         filteredEvents.map((event) => {
                             const isRegistered = registeredEvents.includes(event.id);
+                            const isPending = pendingEvents.includes(String(event.id));
+
                             return (
                                 <div key={event.id} className="wide-event-card">
                                     <div className="wide-card-image-box">
@@ -201,22 +226,6 @@ function ExploreEvents() {
                                     <div className="wide-card-details">
                                         <div className="wide-card-header-row">
                                             <h2 className="wide-event-title">{event.title}</h2>
-
-                                            {/* Action Applied/Register Button added matching the mockup schema */}
-                                            <button
-                                                type="button"
-                                                className={`card-action-register-btn ${isRegistered ? "registered-applied" : ""}`}
-                                                onClick={() => handleRegister(event.id, event.title)}
-                                                disabled={isRegistered}
-                                            >
-                                                {isRegistered ? (
-                                                    <>
-                                                        <CheckCircle size={14} /> Applied
-                                                    </>
-                                                ) : (
-                                                    "Register Now"
-                                                )}
-                                            </button>
                                         </div>
 
                                         <div className="wide-meta-row">
@@ -225,7 +234,7 @@ function ExploreEvents() {
                                                 <span>{event.date}</span>
                                             </div>
                                             <div className="meta-item">
-                                                <MapPin size={14} className="meta-icon-pin" />
+                                                <MapPin size={14} className="meta-icon-map" />
                                                 <span>{event.location}</span>
                                             </div>
                                             <div className="meta-item">
@@ -236,14 +245,39 @@ function ExploreEvents() {
 
                                         <p className="wide-event-description">{event.description}</p>
 
-                                        <div className="wide-roles-pills-box">
-                                            {event.roles.map((role, idx) => (
-                                                <span key={idx} className="role-pill-tag">
-                                                    {role}
-                                                </span>
-                                            ))}
-                                            {event.hasMoreRoles && (
-                                                <span className="role-pill-tag tag-more">+1 more</span>
+                                        <div className="wide-roles-section">
+                                            <span className="roles-title">Available Roles:</span>
+                                            <div className="roles-list-tags">
+                                                {event.roles.map((role, idx) => (
+                                                    <span key={idx} className="role-tag-item">{role}</span>
+                                                ))}
+                                                {event.hasMoreRoles && <span className="role-tag-more">+{event.roles.length - 2} more</span>}
+                                            </div>
+                                        </div>
+
+                                        <div className="wide-card-action-bar">
+                                            {userRole === "admin" ? (
+                                                <button
+                                                    className="card-action-btn admin-edit-mode-btn"
+                                                    onClick={() => handleActionClick(event.id, event.title)}
+                                                >
+                                                    <Edit3 size={16} style={{ marginRight: "6px" }} />
+                                                    Edit Info
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className={`card-action-btn applicant-register-mode-btn ${isRegistered ? "status-registered" : isPending ? "status-pending" : ""}`}
+                                                    onClick={() => handleActionClick(event.id, event.title)}
+                                                    disabled={isRegistered || isPending}
+                                                >
+                                                    {isRegistered ? (
+                                                        <><CheckCircle size={16} /> Registered</>
+                                                    ) : isPending ? (
+                                                        <><Clock size={16} /> Applied (Pending)</>
+                                                    ) : (
+                                                        "Register Now"
+                                                    )}
+                                                </button>
                                             )}
                                         </div>
                                     </div>
@@ -254,7 +288,7 @@ function ExploreEvents() {
                 </div>
             </main>
 
-            <Footer />
+            {userRole === "admin" ? <AdminFooter /> : <Footer />}
         </div>
     );
 }

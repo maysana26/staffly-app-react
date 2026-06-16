@@ -1,0 +1,358 @@
+/* Container Layout */
+.register-page-container {
+    min-height: 100vh;
+    background-color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+}
+
+/* Header Banner Styling */
+.register-header {
+    background-color: #111827;
+    /* Dark midnight navbar blue-black match */
+    color: #ffffff;
+    padding: 40px 10%;
+}
+
+.back-link {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 16px;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: #ffffff;
+}
+
+.register-header h1 {
+    font-size: 32px;
+    margin: 0 0 8px 0;
+    font-weight: 700;
+}
+
+.register-header p {
+    color: #9ca3af;
+    margin: 0;
+    font-size: 16px;
+}
+
+/* Content Area split layout */
+.register-content {
+    display: flex;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    gap: 32px;
+    align-items: flex-start;
+}
+
+/* Left Card: Summary */
+.event-summary-card {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.card-image-wrapper {
+    position: relative;
+    height: 200px;
+}
+
+.card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.category-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background-color: #ff6b00;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 24px;
+}
+
+.card-body h2 {
+    font-size: 22px;
+    margin: 0 0 16px 0;
+    color: #0f172a;
+}
+
+.meta-info p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 8px 0;
+}
+
+.event-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #475569;
+    margin: 20px 0;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 16px;
+}
+
+.organizer-info .label {
+    font-size: 12px;
+    color: #94a3b8;
+    display: block;
+}
+
+.organizer-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 4px 0 0 0;
+    color: #334155;
+}
+
+/* Right Side: Form Configuration */
+.registration-form-wrapper {
+    flex: 1.5;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.registration-form h3 {
+    font-size: 24px;
+    margin: 0 0 24px 0;
+    color: #0f172a;
+}
+
+.section-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 12px;
+}
+
+.required {
+    color: #ef4444;
+}
+
+.optional {
+    color: #94a3b8;
+    font-weight: normal;
+}
+
+/* Role Options Custom Cards */
+.roles-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.role-option-card {
+    display: flex;
+    align-items: flex-start;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.role-option-card:hover {
+    border-color: #cbd5e1;
+    background-color: #f8fafc;
+}
+
+/* Visually highlighted state when clicking */
+.role-option-card.active {
+    border-color: #ff6b00 !important;
+    background-color: #fffbf7 !important;
+}
+
+/* Hide natural radio input completely */
+.role-option-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Custom Styled Radio Indicator circles */
+.radio-custom-indicator {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #cbd5e1;
+    border-radius: 50%;
+    margin-top: 2px;
+    margin-right: 14px;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.role-option-card.active .radio-custom-indicator {
+    border-color: #ff6b00;
+}
+
+.role-option-card.active .radio-custom-indicator::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #ff6b00;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Custom Text elements for card items */
+.role-text-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.role-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.role-desc {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.role-spots-remaining {
+    font-size: 12px;
+    font-weight: 500;
+    color: #df4a00;
+    /* Darker orange text for high-contrast visibility */
+}
+
+/* Textarea Message Field styling */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.form-field label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.form-field textarea {
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.form-field textarea:focus {
+    outline: none;
+    border-color: #ff6b00;
+    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
+}
+
+/* Notice Banner Details styling */
+.notice-banner {
+    background-color: #f1f5f9;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 32px;
+}
+
+.notice-banner p {
+    margin: 0;
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.5;
+}
+
+/* Action Form Footer Button layout rules */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+}
+
+.btn-cancel {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #64748b;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+    background-color: #f8fafc;
+    color: #334155;
+}
+
+.btn-submit {
+    background-color: #ff6b00;
+    border: none;
+    color: #ffffff;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(255, 107, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+    background-color: #e05e00;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+}
+
+/* Pending Application Button State Modification Styles */
+.btn-submit.pending {
+    background-color: #94a3b8;
+    color: #f8fafc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-submit.pending:hover {
+    background-color: #94a3b8;
+    box-shadow: none;
+}
+
+/* Responsive adjustment settings */
+@media (max-width: 768px) {
+    .register-content {
+        flex-direction: column;
+    }
+
+    .event-summary-card,
+    .registration-form-wrapper {
+        width: 100%;
+        flex: none;
+    }
+}

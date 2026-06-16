@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowRight, Briefcase, Award, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import Navbar from "../Components/ApplicantNavbar";
 import FeatureCard from "../components/FeatureCard";
 import EventCard from "../components/EventCard";
-import Footer from "../Components/Footer";
+import Footer from "../Components/ApplicantFooter";
 import "./Home.css";
-
-
 
 const features = [
     { icon: Search, title: "Browse Events", description: "Discover opportunities at conferences, festivals, corporate events, and more", iconBg: "#ff6b00" },
@@ -15,15 +13,28 @@ const features = [
     { icon: Award, title: "Build Reputation", description: "Earn ratings and build your profile to unlock better opportunities", iconBg: "#a855f7" }
 ];
 
-const events = [
-    { image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=600", title: "Tech Innovation Summit 2026", date: "2026-05-15", location: "Convention Center, Downtown", roles: 4, category: "Technology" },
-    { image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600", title: "Summer Music Festival", date: "2026-06-20", location: "Riverside Park", roles: 3, category: "Music" },
-    { image: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=600", title: "Corporate Gala Dinner", date: "2026-05-01", location: "Grand Hotel Ballroom", roles: 2, category: "Corporate" }
-];
-
-
 function Home() {
     const navigate = useNavigate();
+    const [featuredEvents, setFeaturedEvents] = useState([]);
+
+    // Fetch dynamic event data directly from database to populate high-visibility landing components
+    useEffect(() => {
+        const fetchFeaturedOpportunities = async () => {
+            try {
+                const response = await fetch("http://localhost:5000/api/events/featured");
+                if (response.ok) {
+                    const data = await response.json();
+                    setFeaturedEvents(data.slice(0, 3)); // Match the UI display structure seamlessly
+                } else {
+                    console.error("Error retrieving dashboard featured collections");
+                }
+            } catch (error) {
+                console.error("Database connection failure on landing hook:", error);
+            }
+        };
+
+        fetchFeaturedOpportunities();
+    }, []);
 
     return (
         <div className="home-container">
@@ -65,14 +76,14 @@ function Home() {
                 <p className="section-subtitle">Top opportunities available right now</p>
 
                 <div className="events-grid">
-                    {events.map((event, index) => (
+                    {featuredEvents.map((event, index) => (
                         <EventCard
-                            key={index}
-                            image={event.image}
+                            key={event._id || index}
+                            image={event.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=600"}
                             title={event.title}
                             date={event.date}
                             location={event.location}
-                            roles={event.roles}
+                            roles={event.rolesCount || event.availableRoles?.length || 0}
                             category={event.category}
                         />
                     ))}
@@ -81,12 +92,8 @@ function Home() {
                 <button className="view-all-btn" onClick={() => navigate("/events")} >View All Events →</button>
             </section>
             <Footer />
-
         </div>
     );
-
-
-
 }
 
 export default Home;

@@ -1,135 +1,95 @@
-import React, { useState } from "react";
-import { Search, SlidersHorizontal, Calendar, MapPin, Users, CheckCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Search, SlidersHorizontal, Calendar, MapPin, Users, CheckCircle, Edit3 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import "./ExploreEvents.css";
-import Footer from "../Components/Footer";
-import Navbar from "../Components/Navbar";
-
-//added a register button
-
-
-const INITIAL_EVENTS = [
-    {
-        id: 1,
-        title: "Tech Innovation Summit 2026",
-        category: "Technology",
-        badgeClass: "cat-tech",
-        image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=60",
-        date: "2026-05-15 • 09:00 AM - 06:00 PM",
-        location: "Convention Center, Downtown",
-        filledStatus: "6/14 positions filled",
-        description: "Join us for the biggest tech conference of the year featuring global keynotes, workshops, and innovative networking spaces.",
-        roles: ["Event Coordinator (1 needed)", "Registration Desk Staff (2 needed)", "AV Technician (3 needed)"],
-        hasMoreRoles: true
-    },
-    {
-        id: 2,
-        title: "Summer Music Festival",
-        category: "Music",
-        badgeClass: "cat-music",
-        image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&auto=format&fit=crop&q=60",
-        date: "2026-06-20 • 02:00 PM - 11:00 PM",
-        location: "Riverside Park",
-        filledStatus: "21/31 positions filled",
-        description: "An outdoor music festival featuring local and international artists across multi-stage independent production sets.",
-        roles: ["Stage Manager (1 needed)", "Security Personnel (5 needed)", "Cleaning Crew (4 needed)"],
-        hasMoreRoles: false
-    },
-    {
-        id: 3,
-        title: "Corporate Gala Dinner",
-        category: "Corporate",
-        badgeClass: "cat-corporate",
-        image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&auto=format&fit=crop&q=60",
-        date: "2026-05-01 • 07:00 PM - 11:00 PM",
-        location: "Grand Hotel Ballroom",
-        filledStatus: "12/19 positions filled",
-        description: "An elegant evening celebrating our company's 25th anniversary with dinner service, live string quartets, and charity auctions.",
-        roles: ["Wait Staff (4 needed)", "Valet Parking (3 needed)"],
-        hasMoreRoles: false
-    },
-    {
-        id: 4,
-        title: "Startup Pitch Night",
-        category: "Business",
-        badgeClass: "cat-business",
-        image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&auto=format&fit=crop&q=60",
-        date: "2026-04-25 • 06:00 PM - 09:00 PM",
-        location: "Innovation Hub",
-        filledStatus: "3/6 positions filled",
-        description: "Watch aspiring entrepreneurs pitch their ideas to investors in this high-energy workspace environment.",
-        roles: ["Technical Support (1 needed)", "Registration Staff (1 needed)", "Photography (1 needed)"],
-        hasMoreRoles: false
-    },
-    {
-        id: 5,
-        title: "Charity Marathon",
-        category: "Sports",
-        badgeClass: "cat-sports",
-        image: "https://images.unsplash.com/photo-1502224562085-639556652f33?w=600&auto=format&fit=crop&q=60",
-        date: "2026-07-10 • 06:00 AM - 02:00 PM",
-        location: "City Center Route",
-        filledStatus: "29/39 positions filled",
-        description: "Annual charity run supporting local schools with 5K, 10K, and comprehensive hydration management centers across track markers.",
-        roles: ["Water Station Volunteer (5 needed)", "Route Marshal (3 needed)", "Registration Desk (2 needed)"],
-        hasMoreRoles: false
-    },
-    {
-        id: 6,
-        title: "Art Gallery Opening",
-        category: "Arts",
-        badgeClass: "cat-arts",
-        image: "https://images.unsplash.com/photo-1531058020387-3be344559be6?w=600&auto=format&fit=crop&q=60",
-        date: "2026-05-08 • 05:00 PM - 09:00 PM",
-        location: "Modern Art Museum",
-        filledStatus: "5/9 positions filled",
-        description: "Exclusive opening night for our contemporary art exhibition presenting featured international sculptors and digital displays.",
-        roles: ["Gallery Guide (2 needed)", "Reception Staff (2 needed)"],
-        hasMoreRoles: false
-    }
-];
-
-const CATEGORIES = ["All", ...new Set(INITIAL_EVENTS.map(event => event.category))];
+import ApplicantNavbar from "../Components/ApplicantNavbar";
+import ApplicantFooter from "../Components/ApplicantFooter";
+import AdminNavbar from "../Components/AdminNavbar";
+import AdminFooter from "../Components/AdminFooter";
 
 function ExploreEvents() {
+    const navigate = useNavigate();
+    const [events, setEvents] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
-
-    // State to track registered event IDs dynamically
     const [registeredEvents, setRegisteredEvents] = useState([]);
+    const [pendingEvents, setPendingEvents] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [userRole, setUserRole] = useState("applicant");
 
-    const handleRegister = (eventId, eventTitle) => {
-        if (registeredEvents.includes(eventId)) return;
-        setRegisteredEvents([...registeredEvents, eventId]);
-        alert(`Successfully applied for role openings at: ${eventTitle}!`);
-    };
+    useEffect(() => {
+        const currentUserStr = localStorage.getItem("user");
+        if (currentUserStr) {
+            try {
+                const currentUser = JSON.parse(currentUserStr);
+                setUserRole(currentUser.role || "applicant");
+            } catch (e) {
+                setUserRole("applicant");
+            }
+        }
 
-    const filteredEvents = INITIAL_EVENTS.filter((event) => {
+        const storedPending = JSON.parse(localStorage.getItem("pendingEvents") || "[]");
+        setPendingEvents(storedPending);
+    }, []);
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await fetch("http://localhost:5000/api/applicant/explore-events");
+                const data = await response.json();
+                setEvents(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchEvents();
+    }, []);
+
+    const categories = ["All", ...new Set(events.map(e => e.category || "General"))];
+
+    const filteredEvents = events.filter((event) => {
         const matchesSearch =
-            event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            event.location.toLowerCase().includes(searchQuery.toLowerCase());
+            event.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            event.location?.toLowerCase().includes(searchQuery.toLowerCase());
 
         const matchesCategory =
-            selectedCategory === "All" ||
-            event.category === selectedCategory;
+            selectedCategory === "All" || (event.category || "General") === selectedCategory;
 
         return matchesSearch && matchesCategory;
     });
 
+    const handleNavigateRegister = (event) => {
+        const eventId = event.event_id ?? event.id ?? event._id;
+
+        if (!eventId) {
+            alert("Event ID missing - cannot proceed");
+            return;
+        }
+
+        navigate(`/register-event/${eventId}`, {
+            state: {
+                roleId: event.role_id,
+                eventTitle: event.title
+            }
+        });
+    };
+
     return (
         <div className="explore-container">
-            <Navbar />
+            {userRole === "admin" ? <AdminNavbar /> : <ApplicantNavbar />}
 
             <header className="explore-hero">
                 <div className="explore-hero-content">
                     <h1>Explore Events</h1>
                     <p>Find the perfect event opportunity for your skills</p>
 
-                    <div className="search-bar-wrapper" style={{ position: "relative" }}>
+                    <div className="search-bar-wrapper">
                         <div className="search-input-box">
                             <Search className="icon-search" size={18} />
                             <input
-                                type="text"
                                 placeholder="Search by name or location..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -137,124 +97,83 @@ function ExploreEvents() {
                         </div>
 
                         <button
-                            className={`filter-button ${selectedCategory !== "All" ? "active-filter" : ""}`}
+                            className="filter-button"
                             onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
                         >
                             <SlidersHorizontal size={16} />
-                            <span>Filters {selectedCategory !== "All" ? `(${selectedCategory})` : ""}</span>
+                            Filters
                         </button>
-
-                        {isFilterDropdownOpen && (
-                            <div className="filter-dropdown-menu">
-                                <p className="dropdown-section-title">Filter by Category</p>
-                                <div className="category-options-list">
-                                    {CATEGORIES.map((category) => (
-                                        <button
-                                            key={category}
-                                            className={`category-option-btn ${selectedCategory === category ? "selected" : ""}`}
-                                            onClick={() => {
-                                                setSelectedCategory(category);
-                                                setIsFilterDropdownOpen(false);
-                                            }}
-                                        >
-                                            {category}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
                     </div>
                 </div>
             </header>
 
             <main className="explore-main-content">
-                <div className="results-counter">
-                    Found {filteredEvents.length} {filteredEvents.length === 1 ? "event" : "events"}
-                    {selectedCategory !== "All" && ` in "${selectedCategory}"`}
-                </div>
-
                 <div className="explore-cards-grid">
-                    {filteredEvents.length === 0 ? (
-                        <div className="no-results-fallback" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px", color: "#64748b" }}>
-                            <h3>No events found match your selection.</h3>
-                            <p>Try clearing your filters or changing your text search query.</p>
-                            <button
-                                className="clear-filters-link"
-                                onClick={() => { setSearchQuery(""); setSelectedCategory("All"); }}
-                                style={{ marginTop: "12px", background: "none", border: "none", color: "#2563eb", textDecoration: "underline", cursor: "pointer" }}
-                            >
-                                Reset Filters & Search
-                            </button>
-                        </div>
-                    ) : (
-                        filteredEvents.map((event) => {
-                            const isRegistered = registeredEvents.includes(event.id);
-                            return (
-                                <div key={event.id} className="wide-event-card">
-                                    <div className="wide-card-image-box">
-                                        <img src={event.image} alt={event.title} className="wide-event-img" />
-                                        <span className={`wide-card-badge ${event.badgeClass}`}>
-                                            {event.category}
-                                        </span>
-                                    </div>
 
-                                    <div className="wide-card-details">
-                                        <div className="wide-card-header-row">
-                                            <h2 className="wide-event-title">{event.title}</h2>
+                    {filteredEvents.map((event) => {
+                        const eventId = event.event_id || event.id || event._id;
+                        const isPending = pendingEvents.includes(event.role_id);
 
-                                            {/* Action Applied/Register Button added matching the mockup schema */}
-                                            <button
-                                                type="button"
-                                                className={`card-action-register-btn ${isRegistered ? "registered-applied" : ""}`}
-                                                onClick={() => handleRegister(event.id, event.title)}
-                                                disabled={isRegistered}
-                                            >
-                                                {isRegistered ? (
-                                                    <>
-                                                        <CheckCircle size={14} /> Applied
-                                                    </>
-                                                ) : (
-                                                    "Register Now"
-                                                )}
-                                            </button>
-                                        </div>
+                        return (
+                            <div key={event.role_id} className="wide-event-card">
 
-                                        <div className="wide-meta-row">
-                                            <div className="meta-item">
-                                                <Calendar size={14} className="meta-icon-cal" />
-                                                <span>{event.date}</span>
-                                            </div>
-                                            <div className="meta-item">
-                                                <MapPin size={14} className="meta-icon-pin" />
-                                                <span>{event.location}</span>
-                                            </div>
-                                            <div className="meta-item">
-                                                <Users size={14} className="meta-icon-users" />
-                                                <span>{event.filledStatus}</span>
-                                            </div>
-                                        </div>
-
-                                        <p className="wide-event-description">{event.description}</p>
-
-                                        <div className="wide-roles-pills-box">
-                                            {event.roles.map((role, idx) => (
-                                                <span key={idx} className="role-pill-tag">
-                                                    {role}
-                                                </span>
-                                            ))}
-                                            {event.hasMoreRoles && (
-                                                <span className="role-pill-tag tag-more">+1 more</span>
-                                            )}
-                                        </div>
-                                    </div>
+                                <div className="wide-card-image-box">
+                                    <img src={event.image} className="wide-event-img" />
                                 </div>
-                            );
-                        })
-                    )}
+
+                                <div className="wide-card-details">
+
+                                    <div className="wide-card-header-row">
+                                        <h2 className="wide-event-title">{event.title}</h2>
+
+                                        {userRole === "admin" ? (
+                                            <button
+                                                className="card-action-edit-btn"
+                                                onClick={() =>
+                                                    navigate(`/admindashboard/editevent/${eventId}`)
+                                                }
+                                            >
+                                                <Edit3 size={14} />
+                                                Edit Info
+                                            </button>
+                                        ) : (
+                                            <button
+                                                className={`card-action-btn applicant-register-mode-btn ${isPending ? "status-pending" : ""
+                                                    }`}
+                                                onClick={() => handleNavigateRegister(event)}
+                                                disabled={isPending}
+                                            >
+                                                {isPending ? "Pending" : "Register Now"}
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    <div className="wide-meta-row">
+                                        <div className="meta-item">
+                                            <Calendar size={14} />
+                                            {event.date}
+                                        </div>
+                                        <div className="meta-item">
+                                            <MapPin size={14} />
+                                            {event.location}
+                                        </div>
+                                        <div className="meta-item">
+                                            <Users size={14} />
+                                            {event.slots_filled}/{event.slots_needed}
+                                        </div>
+                                    </div>
+
+                                    <p className="wide-event-description">
+                                        {event.description}
+                                    </p>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </main>
 
-            <Footer />
+            {userRole === "admin" ? <AdminFooter /> : <ApplicantFooter />}
         </div>
     );
 }

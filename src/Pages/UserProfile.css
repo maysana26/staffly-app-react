@@ -7,7 +7,6 @@
     padding: 0;
 }
 
-/* Forces the entire page to center content down the middle of the screen */
 .profile-page-wrapper {
     background-color: #f8fafc;
     min-height: 100vh;
@@ -19,25 +18,16 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Forces the Navbar component to stretch fully across the top width */
-.profile-page-wrapper>nav,
-.profile-page-wrapper .navbar,
-.profile-page-wrapper header {
-    width: 100%;
-}
-
-/* The structural bounding box for your central profile content card */
 .profile-main-container {
     flex: 1;
     max-width: 860px;
     width: 100%;
     margin: 40px auto 80px auto;
     padding: 0 20px;
-    box-sizing: border-box;
 }
 
 /* ==========================================================================
-   2. CENTRAL PROFILE CARD STRUCTURE
+   2. CENTRAL PROFILE CARD HEADER & IDENTITY
    ========================================================================== */
 .profile-card-cardboard {
     background-color: #ffffff;
@@ -47,21 +37,27 @@
     border: 1px solid #f1f5f9;
 }
 
-/* Decorative Brand Orange Banner Row */
 .profile-banner-hero {
     background: linear-gradient(135deg, #ff7a00 0%, #ff5100 100%);
     height: 140px;
     width: 100%;
 }
 
-/* User Identity Bio Details Layout */
+/* Flexbox parent container separating user summary (left) and actions (right) */
 .profile-header-details {
     display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     padding: 0 40px;
     margin-top: -45px;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.profile-header-left {
+    display: flex;
     align-items: flex-end;
     gap: 24px;
-    margin-bottom: 30px;
 }
 
 .profile-avatar-frame {
@@ -72,6 +68,7 @@
     border: 4px solid #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     background-color: #ffffff;
+    flex-shrink: 0;
 }
 
 .profile-avatar-frame img {
@@ -81,48 +78,104 @@
 }
 
 .profile-meta-identity {
-    flex: 1;
     padding-bottom: 8px;
-}
-
-.identity-title-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
 }
 
 .profile-user-name {
     font-size: 24px;
     font-weight: 700;
     color: #1e293b;
-    margin: 0;
+    margin: 0 0 4px 0;
 }
 
 .profile-user-email {
     font-size: 14px;
     color: #64748b;
-    margin: 4px 0 0 0;
+    margin: 0;
 }
 
+/* Action Cluster Alignment Row */
+.profile-header-right {
+    padding-bottom: 8px;
+}
+
+.profile-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Button Stylings */
 .btn-edit-profile {
     display: flex;
     align-items: center;
     gap: 6px;
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
-    padding: 8px 14px;
+    padding: 8px 16px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
     color: #334155;
     cursor: pointer;
+    white-space: nowrap;
     transition: all 0.2s ease;
 }
 
 .btn-edit-profile:hover {
     background-color: #f8fafc;
     border-color: #cbd5e1;
+}
+
+.btn-logout-profile {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #fef2f2;
+    border: 1px solid #fee2e2;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ef4444;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.btn-logout-profile:hover {
+    background-color: #fee2e2;
+    border-color: #fca5a5;
+}
+
+.btn-save-profile {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #16a34a;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-cancel-profile {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #ef4444;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
 /* ==========================================================================
@@ -142,7 +195,6 @@
     gap: 16px;
     padding: 16px 20px;
     border-radius: 12px;
-    box-sizing: border-box;
 }
 
 .box-rating {
@@ -203,10 +255,10 @@
 }
 
 /* ==========================================================================
-   4. PROFILE SECTIONS CONTENT BLOCKS (About, Skills, Experience)
+   4. CONTENT BLOCKS & EDIT FIELD MODIFIERS
    ========================================================================== */
 .profile-content-body {
-    padding: 0 40px 40px 40px;
+    padding: 0 40px 20px 40px;
     display: flex;
     flex-direction: column;
     gap: 35px;
@@ -241,7 +293,43 @@
     margin: 0;
 }
 
-/* Skills Badges Container Grid */
+.edit-profile-textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+}
+
+.edit-profile-textarea:focus,
+.edit-profile-input:focus {
+    border-color: #ff6b00;
+}
+
+.edit-skills-field-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.edit-profile-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 14px;
+    outline: none;
+}
+
+.edit-input-hint {
+    font-size: 12px;
+    color: #64748b;
+}
+
 .profile-skills-flexbox {
     display: flex;
     flex-wrap: wrap;
@@ -257,7 +345,7 @@
     font-weight: 500;
 }
 
-/* Experience Cards Tracking List */
+/* Experience List Timeline styling */
 .experience-history-list {
     display: flex;
     flex-direction: column;
@@ -314,22 +402,149 @@
 }
 
 /* ==========================================================================
-   5. RESPONSIVE MOBILE OVERRIDES
+   5. REGISTERED EVENTS SECTION (BOTTOM AREA)
+   ========================================================================== */
+.registered-events-section {
+    margin-top: 15px;
+    border-top: 1px solid #e2e8f0;
+    padding: 30px 40px 40px 40px;
+}
+
+.registered-events-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 20px;
+}
+
+.registered-events-vertical-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.registered-event-card-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    background-color: #f8fafc;
+}
+
+.reg-event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.reg-event-title {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.badge-confirmed {
+    font-size: 12px;
+    background-color: #dcfce7;
+    color: #15803d;
+    padding: 2px 10px;
+    border-radius: 9999px;
+    font-weight: 600;
+}
+
+.reg-event-role-text {
+    margin: 0;
+    font-size: 14px;
+    color: #475569;
+}
+
+.reg-event-role-text span {
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.reg-event-category-tag {
+    font-size: 12px;
+    background-color: #dbeafe;
+    color: #1d4ed8;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.reg-event-location {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.reg-event-meta-footer {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: #475569;
+}
+
+.reg-event-meta-footer span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ==========================================================================
+   6. RESPONSIVE RESPONSIVENESS OVERRIDES
    ========================================================================== */
 @media (max-width: 768px) {
-    .metrics-summary-row {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-
     .profile-header-details {
         flex-direction: column;
         align-items: center;
         text-align: center;
+        margin-top: -55px;
     }
 
-    .identity-title-row {
+    .profile-header-left {
         flex-direction: column;
+        align-items: center;
         gap: 12px;
+    }
+
+    .profile-meta-identity {
+        padding-bottom: 0;
+    }
+
+    .profile-header-right {
+        padding-bottom: 0;
+        width: 100%;
+    }
+
+    .profile-actions-group {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .metrics-summary-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 0 20px;
+    }
+
+    .profile-content-body {
+        padding: 0 20px 20px 20px;
+    }
+
+    .registered-events-section {
+        padding: 24px 20px 30px 20px;
+    }
+
+    .reg-event-header {
+        flex-direction: column;
+        gap: 8px;
     }
 }

@@ -1,12 +1,84 @@
-import React from "react";
+import React, { useState } from "react";
 import { Calendar, MapPin, Tag, Building2, Plus, CheckCircle } from "lucide-react";
 import "./CreateEvent.css";
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer";
+import Navbar from "../Components/AdminNavbar";
+import Footer from "../Components/AdminFooter";
 import { useNavigate } from "react-router-dom";
 
 function CreateEvent() {
     const navigate = useNavigate();
+
+    // Database state fields for event information
+    const [eventData, setEventData] = useState({
+        title: "",
+        date: "",
+        time: "",
+        location: "",
+        description: "",
+        category: "",
+        companyName: "",
+        imageUrl: ""
+    });
+
+    // Database state fields for nested roles
+    const [roles, setRoles] = useState([
+        { name: "", slots: 1, description: "" }
+    ]);
+
+    // Update event data fields dynamically
+    const handleEventChange = (field, value) => {
+        setEventData(prev => ({ ...prev, [field]: value }));
+    };
+
+    // Update individual nested dynamic roles
+    const handleRoleChange = (index, field, value) => {
+        const updatedRoles = [...roles];
+        updatedRoles[index][field] = field === "slots" ? (parseInt(value) || 1) : value;
+        setRoles(updatedRoles);
+    };
+
+    // Add a new blank nested database role row object
+    const handleAddRole = () => {
+        setRoles([...roles, { name: "", slots: 1, description: "" }]);
+    };
+
+    // Remove a dynamic role row object from array state
+    const handleRemoveRole = (index) => {
+        if (roles.length > 1) {
+            setRoles(roles.filter((_, i) => i !== index));
+        }
+    };
+
+    // Database HTTP POST submission lifecycle handler
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const payload = {
+            ...eventData,
+            roles: roles
+        };
+
+        try {
+            const response = await fetch("/api/events", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                alert("Event successfully created and published!");
+                navigate("/admin");
+            } else {
+                const errorData = await response.json();
+                alert(`Error publishing event: ${errorData.message || "Unknown error occured"}`);
+            }
+        } catch (error) {
+            console.error("Database connection failure:", error);
+            alert("Failed to connect to the database server.");
+        }
+    };
 
     return (
         <div className="create-event-canvas">
@@ -28,7 +100,7 @@ function CreateEvent() {
 
             {/* Central Form Container Wrapper */}
             <div className="create-event-form-wrapper">
-                <form className="create-event-form" onSubmit={(e) => e.preventDefault()}>
+                <form className="create-event-form" onSubmit={handleSubmit}>
 
                     {/* SECTION 1: EVENT INFORMATION CARD */}
                     <div className="form-section-card">
@@ -44,6 +116,8 @@ function CreateEvent() {
                                     type="text"
                                     className="form-text-input"
                                     placeholder="e.g., Tech Innovation Summit 2026"
+                                    value={eventData.title}
+                                    onChange={(e) => handleEventChange("title", e.target.value)}
                                     required
                                 />
                             </div>
@@ -54,6 +128,8 @@ function CreateEvent() {
                                 <input
                                     type="date"
                                     className="form-text-input"
+                                    value={eventData.date}
+                                    onChange={(e) => handleEventChange("date", e.target.value)}
                                     required
                                 />
                             </div>
@@ -65,6 +141,8 @@ function CreateEvent() {
                                     type="text"
                                     className="form-text-input"
                                     placeholder="e.g., 09:00 AM - 06:00 PM"
+                                    value={eventData.time}
+                                    onChange={(e) => handleEventChange("time", e.target.value)}
                                     required
                                 />
                             </div>
@@ -78,6 +156,8 @@ function CreateEvent() {
                                         type="text"
                                         className="form-text-input padded-left"
                                         placeholder="e.g., Convention Center, Downtown"
+                                        value={eventData.location}
+                                        onChange={(e) => handleEventChange("location", e.target.value)}
                                         required
                                     />
                                 </div>
@@ -90,6 +170,8 @@ function CreateEvent() {
                                     className="form-textarea-input"
                                     placeholder="Provide a detailed description of the event..."
                                     rows={5}
+                                    value={eventData.description}
+                                    onChange={(e) => handleEventChange("description", e.target.value)}
                                     required
                                 ></textarea>
                             </div>
@@ -103,6 +185,8 @@ function CreateEvent() {
                                         type="text"
                                         className="form-text-input padded-left"
                                         placeholder="Category"
+                                        value={eventData.category}
+                                        onChange={(e) => handleEventChange("category", e.target.value)}
                                         required
                                     />
                                 </div>
@@ -117,6 +201,8 @@ function CreateEvent() {
                                         type="text"
                                         className="form-text-input padded-left"
                                         placeholder="Your Company Name"
+                                        value={eventData.companyName}
+                                        onChange={(e) => handleEventChange("companyName", e.target.value)}
                                         required
                                     />
                                 </div>
@@ -131,6 +217,8 @@ function CreateEvent() {
                                         type="url"
                                         className="form-text-input padded-left"
                                         placeholder="https://example.com/image.jpg"
+                                        value={eventData.imageUrl}
+                                        onChange={(e) => handleEventChange("imageUrl", e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -141,51 +229,69 @@ function CreateEvent() {
                     <div className="form-section-card">
                         <div className="section-card-header-row">
                             <h2 className="section-card-title">Roles & Positions</h2>
-                            <button type="button" className="btn-add-role">
+                            <button type="button" className="btn-add-role" onClick={handleAddRole}>
                                 <Plus size={16} /> Add Role
                             </button>
                         </div>
 
-                        {/* Role Segment Block nested inner box */}
-                        <div className="nested-role-blueprint-box">
-                            <h3 className="role-index-heading">Role #1</h3>
-
-                            <div className="form-grid">
-                                {/* Role Name */}
-                                <div className="form-group custom-three-quarters">
-                                    <label className="form-input-label">Role Name *</label>
-                                    <input
-                                        type="text"
-                                        className="form-text-input"
-                                        placeholder="e.g., Event Coordinator"
-                                        required
-                                    />
+                        {/* Dynamic Database Role Input Blueprint Block */}
+                        {roles.map((role, index) => (
+                            <div key={index} className="nested-role-blueprint-box" style={{ marginBottom: "20px" }}>
+                                <div style={{ display: "flex", justifyContent: "between", alignItems: "center" }}>
+                                    <h3 className="role-index-heading">Role #{index + 1}</h3>
+                                    {roles.length > 1 && (
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveRole(index)}
+                                            style={{ color: "#ef4444", border: "none", background: "none", cursor: "pointer", fontSize: "14px" }}
+                                        >
+                                            Remove Role Block
+                                        </button>
+                                    )}
                                 </div>
 
-                                {/* Positions Needed */}
-                                <div className="form-group custom-one-quarter">
-                                    <label className="form-input-label">Positions Needed *</label>
-                                    <input
-                                        type="number"
-                                        className="form-text-input"
-                                        defaultValue={1}
-                                        min={1}
-                                        required
-                                    />
-                                </div>
+                                <div className="form-grid">
+                                    {/* Role Name */}
+                                    <div className="form-group custom-three-quarters">
+                                        <label className="form-input-label">Role Name *</label>
+                                        <input
+                                            type="text"
+                                            className="form-text-input"
+                                            placeholder="e.g., Event Coordinator"
+                                            value={role.name}
+                                            onChange={(e) => handleRoleChange(index, "name", e.target.value)}
+                                            required
+                                        />
+                                    </div>
 
-                                {/* Role Description */}
-                                <div className="form-group full-width">
-                                    <label className="form-input-label">Role Description *</label>
-                                    <textarea
-                                        className="form-textarea-input"
-                                        placeholder="Describe the responsibilities and requirements..."
-                                        rows={3}
-                                        required
-                                    ></textarea>
+                                    {/* Positions Needed */}
+                                    <div className="form-group custom-one-quarter">
+                                        <label className="form-input-label">Positions Needed *</label>
+                                        <input
+                                            type="number"
+                                            className="form-text-input"
+                                            value={role.slots}
+                                            min={1}
+                                            onChange={(e) => handleRoleChange(index, "slots", e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Role Description */}
+                                    <div className="form-group full-width">
+                                        <label className="form-input-label">Role Description *</label>
+                                        <textarea
+                                            className="form-textarea-input"
+                                            placeholder="Describe the responsibilities and requirements..."
+                                            rows={3}
+                                            value={role.description}
+                                            onChange={(e) => handleRoleChange(index, "description", e.target.value)}
+                                            required
+                                        ></textarea>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        ))}
                     </div>
 
                     {/* SECTION 3: DISCLAIMER CALLOUT NOTE */}
@@ -197,7 +303,7 @@ function CreateEvent() {
 
                     {/* BOTTOM ACTION BUTTONS ROW */}
                     <div className="form-submit-actions-row">
-                        <button type="button" className="btn-cancel-action">
+                        <button type="button" className="btn-cancel-action" onClick={() => navigate("/admin")}>
                             Cancel
                         </button>
                         <button type="submit" className="btn-publish-submit">
@@ -209,7 +315,6 @@ function CreateEvent() {
             </div>
             <Footer />
         </div>
-
     );
 }
 

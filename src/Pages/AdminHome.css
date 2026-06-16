@@ -1,0 +1,184 @@
+.admin-home-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Structural Safety Reset */
+.admin-home-container *,
+.admin-home-container *::before,
+.admin-home-container *::after {
+    box-sizing: inherit;
+}
+
+/* EXACT BACKGROUND MATCH: Includes rich blue gradients sweeping from the bottom right corner */
+.admin-hero-section {
+    background:
+        radial-gradient(circle at 85% 75%, rgba(29, 78, 216, 0.55) 0%, rgba(30, 58, 138, 0.25) 30%, transparent 60%),
+        linear-gradient(140deg, #090e17 0%, #0e1626 45%, #152238 100%);
+    color: white;
+    text-align: center;
+    padding: 140px 20px 160px 20px;
+    width: 100%;
+    position: relative;
+}
+
+/* Master Title Layout */
+.admin-hero-title {
+    font-size: 4.2rem;
+    font-weight: 700;
+    margin: 0 0 24px 0;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+}
+
+/* White to champagne ombré blend */
+.admin-hero-title .admin-text-event {
+    background: linear-gradient(to bottom, #ffffff 30%, #e2d4c5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    margin-right: 16px;
+}
+
+/* Premium glowing high-contrast copper gradient matching your screenshot style specifications */
+.admin-hero-title .admin-text-opportunity {
+    background: linear-gradient(to bottom, #ffae65 10%, #ff8421 50%, #b24b00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.admin-hero-subtitle {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    max-width: 760px;
+    margin: 0 auto 45px auto;
+    line-height: 1.7;
+}
+
+.admin-hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+}
+
+/* Primary Accent Glow Button configuration matching screenshot layouts */
+.admin-btn-primary {
+    background-color: #c25100;
+    color: white;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 12px 30px rgba(194, 81, 0, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 35px rgba(194, 81, 0, 0.65);
+}
+
+.admin-btn-secondary {
+    background-color: #223769;
+    color: #cbd5e1;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    border: 1.5px solid #a34600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.admin-btn-secondary:hover {
+    background-color: #2a4482;
+    color: white;
+}
+
+.admin-features-container {
+    max-width: 1200px;
+    margin: -60px auto 100px auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+.admin-section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 10px 0;
+}
+
+.admin-section-subtitle {
+    text-align: center;
+    color: #64748b;
+    font-size: 1.05rem;
+    margin: 0 0 50px 0;
+}
+
+.admin-events-section {
+    max-width: 1200px;
+    margin: 0 auto 100px auto;
+    padding: 0 40px;
+    width: 100%;
+}
+
+.admin-events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.admin-view-all-btn {
+    display: block;
+    margin: 0 auto;
+    background-color: #0f172a;
+    color: white;
+    padding: 14px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Fluid Design Responsiveness Breakpoints */
+@media (max-width: 992px) {
+
+    .admin-features-container,
+    .admin-events-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 680px) {
+
+    .admin-features-container,
+    .admin-events-grid {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+    }
+
+    .admin-hero-title {
+        font-size: 2.6rem;
+    }
+}

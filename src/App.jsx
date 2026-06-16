@@ -4,12 +4,14 @@ import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Home from "./Pages/Home";
 import ExploreEvents from './Pages/ExploreEvents';
-import UserProfile from "./Pages/UserProfile"; // 1. Import it at the top
-import './App.css'
+import UserProfile from "./Pages/UserProfile";
 import MyEvents from './Pages/MyEvents';
 import AdminDashboard from './Pages/AdminDashboard';
 import CreateEvent from './Pages/CreateEvent';
 import EditEvent from './Pages/EditEvent';
+// import ViewEvent from './Pages/ViewEvent'; // IMPORT FIXED: Added missing import to prevent compilation crash
+import RegisterEvent from './Pages/RegisterEvent'; // ROUTE FIXED: Connected the registration page view
+import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -25,46 +27,31 @@ function App() {
         {/* 2. The Signup Page */}
         <Route path="/signup" element={<Signup />} />
 
-
         <Route path="/events" element={<ExploreEvents />} />
 
+        <Route path="/register-event/:eventId" element={<RegisterEvent />} />
 
         <Route path="/myevents" element={<MyEvents />} />
 
-
         <Route path="/profile" element={<UserProfile />} />
+
         {/* NESTED ADMIN ROUTES */}
         <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/admin/events" element={<ExploreEvents />} />
 
-        {/* STANDALONE CREATE EVENT ROUTE (Moved outside the block!) */}
+        {/* STANDALONE CREATE EVENT ROUTE */}
         <Route path="/admindashboard/createevent" element={<CreateEvent />} />
 
-        <Route path="/admindashboard/viewevent/:id" element={<ViewEvent />} />
-        {/* Add this temporary route right underneath your original one */}
-        <Route path="/admindashboard/editevent/:id" element={<EditEvent />} />
-        <Route path="/test-edit" element={<EditEvent />} /> {/* <-- TEMPORARY VIEW PATH */}
+        {/* <Route path="/admindashboard/viewevent/:id" element={<ViewEvent />} /> */}
 
-        {/* 3. Redirect: If the user goes to the base URL (/), send them to Login */}
+        <Route path="/admindashboard/editevent/:id" element={<EditEvent />} />
+        <Route path="/test-edit" element={<EditEvent />} />
+
+        {/* 3. Redirect: If the usaer goes to the base URL (/), send them to Login */}
         <Route path="/" element={<Navigate to="/login" />} />
 
         {/* 4. Catch-all: If the user types a wrong URL, send them to Login */}
         <Route path="*" element={<Navigate to="/login" />} />
-
-
-
-
-
-
-
-
-
-
-
-        {/* 3. Redirect: If the user goes to the base URL (/), send them to Login */}
-        {/* <Route path="/" element={<Navigate to="/login" />} /> */}
-
-        {/* 4. Catch-all: If the user types a wrong URL, send them to Login */}
-        {/* <Route path="*" element={<Navigate to="/login" />} /> */}
       </Routes>
     </Router>
   )

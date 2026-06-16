@@ -21,7 +21,7 @@ function Home() {
     useEffect(() => {
         const fetchFeaturedOpportunities = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/events/featured");
+                const response = await fetch("http://localhost:5000/api/events");
                 if (response.ok) {
                     const data = await response.json();
                     setFeaturedEvents(data.slice(0, 3)); // Match the UI display structure seamlessly
@@ -83,8 +83,8 @@ function Home() {
                             title={event.title}
                             date={event.date}
                             location={event.location}
-                            roles={event.rolesCount || event.availableRoles?.length || 0}
-                            category={event.category}
+
+
                         />
                     ))}
                 </div>

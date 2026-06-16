@@ -19,38 +19,44 @@ function UserProfile() {
         const fetchProfileData = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const userSession = JSON.parse(localStorage.getItem("user"));
+                const userSession = JSON.parse(localStorage.getItem("user") || "{}");
 
-                if (!token || !userSession) {
+                if (!token || !userSession.email) {
                     navigate("/login");
                     return;
                 }
 
-                const response = await fetch(`http://localhost:5000/api/applicant/profile?email=${encodeURIComponent(userSession.email)}`, {
-                    method: "GET"
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setProfile(data);
-                    setEditAbout(data.about || "");
-
-                    if (data.skills) {
-                        if (Array.isArray(data.skills)) {
-                            setEditSkillsString(data.skills.join(", "));
-                        } else if (typeof data.skills === "string") {
-                            setEditSkillsString(data.skills);
-                        }
-                    } else {
-                        setEditSkillsString("");
+                const response = await fetch(
+                    `http://localhost:5000/api/applicant/profile?email=${encodeURIComponent(userSession.email)}`,
+                    {
+                        method: "GET"
                     }
+                );
+
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    console.error("Failed to fetch profile details:", data);
+                    alert(data.message || "Failed to fetch profile details.");
+                    setProfile(null);
+                    return;
+                }
+
+                setProfile(data);
+                setEditAbout(data.about || "");
+
+                if (Array.isArray(data.skills)) {
+                    setEditSkillsString(data.skills.join(", "));
+                } else if (typeof data.skills === "string") {
+                    setEditSkillsString(data.skills);
                 } else {
-                    console.error("Failed to fetch profile details");
+                    setEditSkillsString("");
                 }
             } catch (error) {
                 console.error("Database connection error:", error);
+                alert(`Profile fetch error: ${error.message}`);
             } finally {
-                loading && setLoading(false);
+                setLoading(false);
             }
         };
 
@@ -60,68 +66,97 @@ function UserProfile() {
     const handleSaveProfile = async () => {
         const processedSkills = editSkillsString
             .split(",")
-            .map(skill => skill.trim())
-            .filter(skill => skill.length > 0);
+            .map((skill) => skill.trim())
+            .filter((skill) => skill.length > 0);
 
         try {
             const token = localStorage.getItem("token");
-            const userSession = JSON.parse(localStorage.getItem("user"));
 
-            // Absolute identifier backup configuration setup
-            const targetEmail = userSession?.email || profile?.email;
+            if (!token) {
+                alert("You are not logged in. Please log in again.");
+                navigate("/login");
+                return;
+            }
 
             const response = await fetch("http://localhost:5000/api/applicant/profile/update", {
                 method: "PUT",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    email: targetEmail,
                     about: editAbout,
                     skills: processedSkills
                 })
             });
 
-            if (response.ok) {
-                const updatedData = await response.json();
-                const finalSkills = Array.isArray(updatedData.skills) ? updatedData.skills : processedSkills;
+            const updatedData = await response.json().catch(() => ({}));
 
-                setProfile(prev => ({
-                    ...prev,
-                    about: updatedData.about !== undefined ? updatedData.about : editAbout,
-                    skills: finalSkills
-                }));
-                setIsEditing(false);
-            } else {
-                alert("Failed to update profile info in database.");
+            if (!response.ok) {
+                console.error("Profile update failed:", response.status, updatedData);
+                alert(updatedData.message || "Failed to update profile info in database.");
+                return;
             }
+
+            const finalSkills = Array.isArray(updatedData.skills)
+                ? updatedData.skills
+                : processedSkills;
+
+            setProfile((prev) => ({
+                ...prev,
+                about: updatedData.about !== undefined ? updatedData.about : editAbout,
+                skills: finalSkills
+            }));
+
+            setIsEditing(false);
+            alert("Profile updated successfully!");
         } catch (error) {
             console.error("Error saving profile update:", error);
+            alert(`Error saving profile: ${error.message}`);
         }
     };
 
     const handleCancelEdit = () => {
         setEditAbout(profile?.about || "");
-        setEditSkillsString(profile?.skills ? (Array.isArray(profile.skills) ? profile.skills.join(", ") : profile.skills) : "");
+        setEditSkillsString(
+            profile?.skills
+                ? Array.isArray(profile.skills)
+                    ? profile.skills.join(", ")
+                    : profile.skills
+                : ""
+        );
         setIsEditing(false);
     };
+
     const handleLogout = () => {
-        // Clear out everything completely from your user session storage
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         localStorage.removeItem("pendingEvents");
 
         alert("Logged out successfully!");
-        navigate("/login"); // bounce back to the login page cleanly
+        navigate("/login");
     };
 
     if (loading) {
-        return <div className="loading-fallback" style={{ textAlign: "center", padding: "120px", color: "#64748b" }}>Loading profile metrics safely...</div>;
+        return (
+            <div
+                className="loading-fallback"
+                style={{ textAlign: "center", padding: "120px", color: "#64748b" }}
+            >
+                Loading profile metrics safely...
+            </div>
+        );
     }
 
     if (!profile) {
-        return <div className="error-fallback" style={{ textAlign: "center", padding: "120px", color: "#ef4444" }}>Error parsing profile connection.</div>;
+        return (
+            <div
+                className="error-fallback"
+                style={{ textAlign: "center", padding: "120px", color: "#ef4444" }}
+            >
+                Error parsing profile connection.
+            </div>
+        );
     }
 
     return (
@@ -134,15 +169,37 @@ function UserProfile() {
 
                     <div className="profile-header-details">
                         <div className="profile-header-left">
-                            <div className="profile-avatar-frame" style={{ display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#f1f5f9", overflow: "hidden" }}>
+                            <div
+                                className="profile-avatar-frame"
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: "#f1f5f9",
+                                    overflow: "hidden"
+                                }}
+                            >
                                 {profile.avatar ? (
                                     <img src={profile.avatar} alt={profile.name} />
                                 ) : (
-                                    <div className="profile-avatar-placeholder" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", color: "#94a3b8", fontSize: "1.5rem", fontWeight: "bold" }}>
+                                    <div
+                                        className="profile-avatar-placeholder"
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            width: "100%",
+                                            height: "100%",
+                                            color: "#94a3b8",
+                                            fontSize: "1.5rem",
+                                            fontWeight: "bold"
+                                        }}
+                                    >
                                         {profile.name ? profile.name.charAt(0).toUpperCase() : <User size={32} />}
                                     </div>
                                 )}
                             </div>
+
                             <div className="profile-meta-identity">
                                 <h1 className="profile-user-name">{profile.name}</h1>
                                 <p className="profile-user-email">{profile.email}</p>
@@ -155,6 +212,7 @@ function UserProfile() {
                                     <button className="btn-edit-profile" onClick={() => setIsEditing(true)}>
                                         <Edit3 size={14} /> <span>Edit Profile</span>
                                     </button>
+
                                     <button className="btn-logout-profile" onClick={handleLogout}>
                                         <LogOut size={14} /> <span>Logout</span>
                                     </button>
@@ -164,6 +222,7 @@ function UserProfile() {
                                     <button className="btn-save-profile" onClick={handleSaveProfile}>
                                         <Check size={14} /> <span>Save</span>
                                     </button>
+
                                     <button className="btn-cancel-profile" onClick={handleCancelEdit}>
                                         <X size={14} /> <span>Cancel</span>
                                     </button>
@@ -173,25 +232,28 @@ function UserProfile() {
                     </div>
 
                     <div className="metrics-summary-row">
-                        <div className="metric-box box-rating">
-                            <div className="metric-icon-circle circle-rating">
+                        {/* <div className="metric-box box-rating"> */}
+                        {/* <div className="metric-icon-circle circle-rating">
                                 <Star size={18} fill="#ff6b00" color="#ff6b00" />
-                            </div>
-                            <div className="metric-txt-stack">
+                            </div> */}
+
+                        {/* <div className="metric-txt-stack">
                                 <span className="metric-lbl">Rating</span>
                                 <span className="metric-val">{profile.rating || "N/A"}</span>
+
                                 <div className="stars-indicator-row">
                                     {[...Array(5)].map((_, i) => (
                                         <Star key={i} size={12} fill="#ff6b00" color="#ff6b00" />
                                     ))}
                                 </div>
-                            </div>
-                        </div>
+                            </div> */}
+                        {/* </div> */}
 
                         <div className="metric-box box-events">
                             <div className="metric-icon-circle circle-events">
                                 <Briefcase size={18} color="#2563eb" />
                             </div>
+
                             <div className="metric-txt-stack">
                                 <span className="metric-lbl">Total Events</span>
                                 <span className="metric-val">{profile.total_events || 0}</span>
@@ -202,6 +264,7 @@ function UserProfile() {
                             <div className="metric-icon-circle circle-member">
                                 <Calendar size={18} color="#a855f7" />
                             </div>
+
                             <div className="metric-txt-stack">
                                 <span className="metric-lbl">Member Since</span>
                                 <span className="metric-val">{profile.member_since || "2026"}</span>
@@ -212,6 +275,7 @@ function UserProfile() {
                     <div className="profile-content-body">
                         <section className="body-data-block">
                             <h2 className="body-block-heading">About</h2>
+
                             {isEditing ? (
                                 <textarea
                                     className="edit-profile-textarea"
@@ -219,12 +283,15 @@ function UserProfile() {
                                     onChange={(e) => setEditAbout(e.target.value)}
                                 />
                             ) : (
-                                <p className="body-block-paragraph">{profile.about || "No professional overview summary registered yet."}</p>
+                                <p className="body-block-paragraph">
+                                    {profile.about || "No professional overview summary registered yet."}
+                                </p>
                             )}
                         </section>
 
                         <section className="body-data-block">
                             <h2 className="body-block-heading">Skills</h2>
+
                             {isEditing ? (
                                 <div className="edit-skills-field-wrapper">
                                     <input
@@ -233,12 +300,17 @@ function UserProfile() {
                                         value={editSkillsString}
                                         onChange={(e) => setEditSkillsString(e.target.value)}
                                     />
-                                    <span className="edit-input-hint">Separate skills with commas (e.g. Hosting, Logistics)</span>
+
+                                    <span className="edit-input-hint">
+                                        Separate skills with commas (e.g. Hosting, Logistics)
+                                    </span>
                                 </div>
                             ) : (
                                 <div className="profile-skills-flexbox">
                                     {(Array.isArray(profile.skills) ? profile.skills : []).map((skill, index) => (
-                                        <span key={index} className="profile-skill-badge">{skill}</span>
+                                        <span key={index} className="profile-skill-badge">
+                                            {skill}
+                                        </span>
                                     ))}
                                 </div>
                             )}
@@ -249,26 +321,31 @@ function UserProfile() {
                                 <Award size={18} className="heading-icon-award" />
                                 <span>Experience History</span>
                             </h2>
+
                             <div className="experience-history-list">
-                                {(profile.experience && profile.experience.length > 0) ? (
+                                {profile.experience && profile.experience.length > 0 ? (
                                     profile.experience.map((item) => (
                                         <div key={item.id} className="history-card-item">
                                             <div className="history-left-details">
                                                 <h3 className="history-event-title">{item.title}</h3>
                                                 <p className="history-event-role">{item.role}</p>
+
                                                 <div className="history-meta-date">
                                                     <Calendar size={14} />
                                                     <span>{item.date}</span>
                                                 </div>
                                             </div>
-                                            <div className="history-right-badge">
+
+                                            {/* <div className="history-right-badge">
                                                 <Star size={14} fill="#ff6b00" color="#ff6b00" />
                                                 <span>{item.rating}</span>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     ))
                                 ) : (
-                                    <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>No verification records found in feedback history registry rows.</p>
+                                    <p style={{ color: "#94a3b8", fontSize: "0.9rem" }}>
+                                        No verification records found in feedback history registry rows.
+                                    </p>
                                 )}
                             </div>
                         </section>
@@ -281,28 +358,44 @@ function UserProfile() {
                         </h2>
 
                         <div className="registered-events-vertical-list">
-                            {(profile.registeredEvents && profile.registeredEvents.length > 0) ? (
+                            {profile.registeredEvents && profile.registeredEvents.length > 0 ? (
                                 profile.registeredEvents.map((event) => (
                                     <div key={event.id} className="registered-event-card-item">
                                         <div className="reg-event-header">
                                             <div>
                                                 <h3 className="reg-event-title">
                                                     {event.title}
-                                                    <span className="badge-confirmed">● {event.status}</span>
+                                                    <span className="badge-confirmed"> {event.status}</span>
                                                 </h3>
-                                                <p className="reg-event-role-text">Role: <span>{event.role}</span></p>
+
+                                                <p className="reg-event-role-text">
+                                                    Role: <span>{event.role}</span>
+                                                </p>
                                             </div>
+
                                             <span className="reg-event-category-tag">{event.category}</span>
                                         </div>
-                                        <p className="reg-event-location">📍 {event.location}</p>
+
+                                        <p className="reg-event-location">{event.location}</p>
+
                                         <div className="reg-event-meta-footer">
-                                            <span><Calendar size={14} /> {event.date}</span>
-                                            <span>⏱ {event.time}</span>
+                                            <span>
+                                                <Calendar size={14} /> {event.date}
+                                            </span>
+                                            <span>{event.time}</span>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <p style={{ color: '#94a3b8', fontSize: '0.9rem', paddingLeft: '10px' }}>Not signed up for any active roles currently.</p>
+                                <p
+                                    style={{
+                                        color: "#94a3b8",
+                                        fontSize: "0.9rem",
+                                        paddingLeft: "10px"
+                                    }}
+                                >
+                                    Not signed up for any active roles currently.
+                                </p>
                             )}
                         </div>
                     </section>

@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Auth.css";
 
 function Login() {
+
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -19,6 +21,7 @@ function Login() {
 
         try {
             setLoading(true);
+
             const response = await fetch("http://localhost:5000/api/applicant/login", {
                 method: "POST",
                 headers: {
@@ -33,21 +36,19 @@ function Login() {
                 throw new Error(data.message || "Invalid credentials!");
             }
 
-            // Guard rails to guarantee token data exists cleanly
-            if (data.token) {
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("user", JSON.stringify(data.user));
-            } else {
-                throw new Error("Token payload missing from server login response data.");
+            if (!data.token || !data.user) {
+                throw new Error("Login response missing token or user data.");
             }
+
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
 
             alert(`Logged in successfully as ${data.user.role}!`);
 
-            // Dynamic dashboard routing based on DB user role
             if (data.user.role === "admin") {
-                navigate("/admindashboard");
+                navigate("/admindashboard", { replace: true });
             } else {
-                navigate("/home");
+                navigate("/home", { replace: true });
             }
 
             setEmail("");
@@ -104,7 +105,9 @@ function Login() {
                         <label className="checkbox-label">
                             <input type="checkbox" /> Remember me
                         </label>
-                        <button type="button" className="forgot-link">Forgot password?</button>
+                        <button type="button" className="forgot-link">
+                            Forgot password?
+                        </button>
                     </div>
 
                     <button type="submit" className="login-button" disabled={loading}>
@@ -118,7 +121,8 @@ function Login() {
             </div>
 
             <p className="legal-text">
-                By logging in, you agree to our <span>Terms of Service</span> and <span>Privacy Policy</span>
+                By logging in, you agree to our <span>Terms of Service</span> and{" "}
+                <span>Privacy Policy</span>
             </p>
         </div>
     );

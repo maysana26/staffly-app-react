@@ -11,6 +11,7 @@ import CreateEvent from './Pages/CreateEvent';
 import EditEvent from './Pages/EditEvent';
 // import ViewEvent from './Pages/ViewEvent'; // IMPORT FIXED: Added missing import to prevent compilation crash
 import RegisterEvent from './Pages/RegisterEvent'; // ROUTE FIXED: Connected the registration page view
+import AdminHome from './Pages/AdminHome';
 import './App.css'
 
 function App() {
@@ -28,7 +29,8 @@ function App() {
         <Route path="/signup" element={<Signup />} />
 
         <Route path="/events" element={<ExploreEvents />} />
-
+        {/* used by RegisterEvent.jsx */}
+        <Route path="/explore-events" element={<ExploreEvents />} />
         <Route path="/register-event/:eventId" element={<RegisterEvent />} />
 
         <Route path="/myevents" element={<MyEvents />} />
@@ -38,6 +40,7 @@ function App() {
         {/* NESTED ADMIN ROUTES */}
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/admin/events" element={<ExploreEvents />} />
+        <Route path="/adminhome" element={<AdminHome />} />
 
         {/* STANDALONE CREATE EVENT ROUTE */}
         <Route path="/admindashboard/createevent" element={<CreateEvent />} />

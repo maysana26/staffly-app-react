@@ -1,47 +1,46 @@
-/* Container Layout */
 .register-page-container {
     min-height: 100vh;
-    background-color: #f8fafc;
+    background: #f8fafc;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: #1e293b;
 }
 
-/* Header Banner Styling */
 .register-header {
-    background-color: #111827;
-    /* Dark midnight navbar blue-black match */
+    background:
+        linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(15, 23, 42, 0.96)),
+        #111827;
     color: #ffffff;
-    padding: 40px 10%;
+    padding: 42px 10%;
 }
 
 .back-link {
     background: none;
     border: none;
-    color: #9ca3af;
+    color: #cbd5e1;
     cursor: pointer;
     font-size: 14px;
     margin-bottom: 16px;
     padding: 0;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .back-link:hover {
     color: #ffffff;
+    transform: translateX(-3px);
 }
 
 .register-header h1 {
     font-size: 32px;
     margin: 0 0 8px 0;
-    font-weight: 700;
+    font-weight: 750;
 }
 
 .register-header p {
-    color: #9ca3af;
+    color: #cbd5e1;
     margin: 0;
     font-size: 16px;
 }
 
-/* Content Area split layout */
 .register-content {
     display: flex;
     max-width: 1200px;
@@ -49,20 +48,41 @@
     padding: 0 20px;
     gap: 32px;
     align-items: flex-start;
+    animation: registerFadeUp 0.55s ease both;
 }
 
-/* Left Card: Summary */
+.event-summary-card,
+.registration-form-wrapper {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.event-summary-card:hover,
+.registration-form-wrapper:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.09);
+}
+
 .event-summary-card {
     flex: 1;
-    background: #ffffff;
-    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 .card-image-wrapper {
     position: relative;
-    height: 200px;
+    height: 210px;
+    background: #e2e8f0;
+}
+
+.card-image-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.04), rgba(15, 23, 42, 0.34));
+    pointer-events: none;
 }
 
 .card-image-wrapper img {
@@ -75,12 +95,14 @@
     position: absolute;
     top: 16px;
     left: 16px;
+    z-index: 1;
     background-color: #ff6b00;
     color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
+    padding: 5px 12px;
+    border-radius: 999px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
+    box-shadow: 0 8px 18px rgba(255, 107, 0, 0.28);
 }
 
 .card-body {
@@ -116,18 +138,14 @@
 
 .organizer-name {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 650;
     margin: 4px 0 0 0;
     color: #334155;
 }
 
-/* Right Side: Form Configuration */
 .registration-form-wrapper {
     flex: 1.5;
-    background: #ffffff;
-    border-radius: 16px;
     padding: 32px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 .registration-form h3 {
@@ -139,7 +157,7 @@
 .section-label {
     display: block;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 650;
     color: #334155;
     margin-bottom: 12px;
 }
@@ -153,7 +171,6 @@
     font-weight: normal;
 }
 
-/* Role Options Custom Cards */
 .roles-group {
     display: flex;
     flex-direction: column;
@@ -164,33 +181,34 @@
 .role-option-card {
     display: flex;
     align-items: flex-start;
+    background: #ffffff;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
     padding: 16px;
     cursor: pointer;
     position: relative;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .role-option-card:hover {
+    transform: translateX(4px);
     border-color: #cbd5e1;
     background-color: #f8fafc;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
 }
 
-/* Visually highlighted state when clicking */
 .role-option-card.active {
     border-color: #ff6b00 !important;
     background-color: #fffbf7 !important;
+    box-shadow: 0 12px 28px rgba(255, 107, 0, 0.12);
 }
 
-/* Hide natural radio input completely */
 .role-option-card input[type="radio"] {
     position: absolute;
     opacity: 0;
     cursor: pointer;
 }
 
-/* Custom Styled Radio Indicator circles */
 .radio-custom-indicator {
     width: 18px;
     height: 18px;
@@ -218,14 +236,13 @@
     transform: translate(-50%, -50%);
 }
 
-/* Custom Text elements for card items */
 .role-text-details {
     display: flex;
     flex-direction: column;
 }
 
 .role-name {
-    font-weight: 600;
+    font-weight: 650;
     font-size: 15px;
     color: #1e293b;
     margin-bottom: 4px;
@@ -239,12 +256,10 @@
 
 .role-spots-remaining {
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 600;
     color: #df4a00;
-    /* Darker orange text for high-contrast visibility */
 }
 
-/* Textarea Message Field styling */
 .form-field {
     display: flex;
     flex-direction: column;
@@ -254,7 +269,7 @@
 
 .form-field label {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 650;
     color: #334155;
 }
 
@@ -266,6 +281,7 @@
     font-size: 14px;
     resize: vertical;
     font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-field textarea:focus {
@@ -274,7 +290,6 @@
     box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
 }
 
-/* Notice Banner Details styling */
 .notice-banner {
     background-color: #f1f5f9;
     border-radius: 8px;
@@ -289,7 +304,154 @@
     line-height: 1.5;
 }
 
-/* Action Form Footer Button layout rules */
+/* Animated Weather API Block */
+.weather-api-card {
+    position: relative;
+    overflow: hidden;
+    margin: 22px 0 0;
+    padding: 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    background:
+        radial-gradient(circle at 14% 18%, rgba(56, 189, 248, 0.25), transparent 28%),
+        radial-gradient(circle at 86% 12%, rgba(250, 204, 21, 0.22), transparent 26%),
+        linear-gradient(135deg, #f0f9ff 0%, #ffffff 55%, #fff7ed 100%);
+    box-shadow: 0 14px 30px rgba(14, 165, 233, 0.12);
+    animation: weatherFloat 4.5s ease-in-out infinite;
+}
+
+.weather-api-card::before {
+    content: "";
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    top: -72px;
+    right: -48px;
+    border-radius: 50%;
+    background: rgba(250, 204, 21, 0.48);
+    animation: sunPulse 3.2s ease-in-out infinite;
+}
+
+.weather-api-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.5) 45%, transparent 70%);
+    transform: translateX(-120%);
+    animation: weatherShine 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.weather-api-header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.weather-api-title {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.weather-api-title strong {
+    font-size: 14px;
+    color: #0f172a;
+}
+
+.weather-api-title span {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.weather-source-pill {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 800;
+    color: #0369a1;
+    background: rgba(224, 242, 254, 0.92);
+    border: 1px solid rgba(14, 165, 233, 0.24);
+    padding: 6px 10px;
+    border-radius: 999px;
+}
+
+.weather-api-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.weather-api-metric {
+    background: rgba(255, 255, 255, 0.74);
+    border: 1px solid rgba(226, 232, 240, 0.82);
+    border-radius: 12px;
+    padding: 12px;
+    backdrop-filter: blur(8px);
+    animation: metricPop 0.45s ease both;
+}
+
+.weather-api-metric:nth-child(2) {
+    animation-delay: 0.08s;
+}
+
+.weather-api-metric:nth-child(3) {
+    animation-delay: 0.16s;
+}
+
+.weather-api-metric:nth-child(4) {
+    animation-delay: 0.24s;
+}
+
+.weather-api-label {
+    display: block;
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.weather-api-value {
+    font-size: 17px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.weather-api-loading {
+    position: relative;
+    overflow: hidden;
+    margin: 22px 0 0;
+    padding: 16px;
+    border-radius: 14px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 13px;
+}
+
+.weather-api-loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 90px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+    animation: loadingSweep 1.4s ease-in-out infinite;
+}
+
+.weather-api-error {
+    margin: 22px 0 0;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #fed7aa;
+    background: #fff7ed;
+    color: #9a3412;
+    font-size: 13px;
+}
+
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -302,7 +464,7 @@
     color: #64748b;
     padding: 12px 24px;
     border-radius: 8px;
-    font-weight: 600;
+    font-weight: 650;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -319,19 +481,19 @@
     color: #ffffff;
     padding: 12px 28px;
     border-radius: 8px;
-    font-weight: 600;
+    font-weight: 650;
     font-size: 14px;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(255, 107, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(255, 107, 0, 0.22);
     transition: all 0.2s ease;
 }
 
 .btn-submit:hover {
     background-color: #e05e00;
-    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(255, 107, 0, 0.28);
 }
 
-/* Pending Application Button State Modification Styles */
 .btn-submit.pending {
     background-color: #94a3b8;
     color: #f8fafc;
@@ -341,10 +503,81 @@
 
 .btn-submit.pending:hover {
     background-color: #94a3b8;
+    transform: none;
     box-shadow: none;
 }
 
-/* Responsive adjustment settings */
+@keyframes registerFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes weatherFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes sunPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.52;
+    }
+
+    50% {
+        transform: scale(1.12);
+        opacity: 0.75;
+    }
+}
+
+@keyframes weatherShine {
+    0% {
+        transform: translateX(-120%);
+    }
+
+    45%,
+    100% {
+        transform: translateX(120%);
+    }
+}
+
+@keyframes metricPop {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes loadingSweep {
+    from {
+        left: -110px;
+    }
+
+    to {
+        left: 100%;
+    }
+}
+
 @media (max-width: 768px) {
     .register-content {
         flex-direction: column;
@@ -354,5 +587,23 @@
     .registration-form-wrapper {
         width: 100%;
         flex: none;
+    }
+
+    .weather-api-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .weather-api-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
     }
 }

@@ -1,58 +1,78 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Trash2, Plus, Save } from 'lucide-react';
-import './EditEvent.css';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Save } from "lucide-react";
+
+import "./EditEvent.css";
 import Navbar from "../Components/AdminNavbar";
 import Footer from "../Components/AdminFooter";
 
 function EditEvent() {
     const navigate = useNavigate();
-    const { id } = useParams(); // Retrieves the specific Event ID structure from the active route matching the schema
+    const { id } = useParams();
 
-    // Controlled database collection state blocks
     const [eventData, setEventData] = useState({
-        title: '',
-        date: '',
-        time: '',
-        location: '',
-        category: 'Technology',
-        description: '',
-        imageUrl: ''
+        title: "",
+        date: "",
+        location: "",
+        category: "Technology",
+        description: ""
     });
 
-    const [roles, setRoles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+    const [error, setError] = useState("");
 
-    // Initial database fetch hook sequence on container mount
+    const token = localStorage.getItem("token");
+
+    const formatDateForInput = (dateValue) => {
+        if (!dateValue) {
+            return "";
+        }
+
+        const parsedDate = new Date(dateValue);
+
+        if (Number.isNaN(parsedDate.getTime())) {
+            return String(dateValue).slice(0, 10);
+        }
+
+        return parsedDate.toISOString().slice(0, 10);
+    };
+
     useEffect(() => {
         const fetchEventDetails = async () => {
+            if (!id) {
+                setError("Event ID is missing.");
+                setIsLoading(false);
+                return;
+            }
+
             try {
-                // Target endpoints specific to item records dynamically
-                const response = await fetch(`/api/events/${id || 'mock-id'}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setEventData({
-                        title: data.title || '',
-                        date: data.date || '',
-                        time: data.time || '',
-                        location: data.location || '',
-                        category: data.category || 'Technology',
-                        description: data.description || '',
-                        imageUrl: data.imageUrl || ''
-                    });
-                    setRoles(data.roles || []);
-                } else {
-                    console.error("Failed to recover target database payload, initializing sandbox backup model.");
-                    // Safe fallback structural container model mapping
-                    setRoles([
-                        { id: 1, name: 'Event Coordinator', slots: 2, description: 'Manage event flow and attendee' },
-                        { id: 2, name: 'Registration Desk Staff', slots: 5, description: 'Handle attendee check-in and ba' },
-                        { id: 3, name: 'AV Technician', slots: 3, description: 'Manage audio/visual equipment' },
-                        { id: 4, name: 'Catering Staff', slots: 4, description: 'Serve food and beverages throug' }
-                    ]);
+                setError("");
+
+                const response = await fetch(
+                    `http://localhost:5000/api/events/${id}`
+                );
+
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.detail ||
+                        data.message ||
+                        `Failed to load event. Status: ${response.status}`
+                    );
                 }
+
+                setEventData({
+                    title: data.title || "",
+                    date: formatDateForInput(data.date),
+                    location: data.location || "",
+                    category: data.category || "Technology",
+                    description: data.description || ""
+                });
             } catch (err) {
-                console.error("Database connection fault pipeline channel:", err);
+                console.error("Failed to fetch event:", err);
+                setError(err.message);
             } finally {
                 setIsLoading(false);
             }
@@ -61,55 +81,99 @@ function EditEvent() {
         fetchEventDetails();
     }, [id]);
 
-    // Handle updates to individual role row fields dynamically
-    const handleRoleChange = (id, field, value) => {
-        setRoles(roles.map(role => role.id === id ? { ...role, [field]: field === 'slots' ? (parseInt(value) || 0) : value } : role));
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+
+        setEventData((previousData) => ({
+            ...previousData,
+            [name]: value
+        }));
     };
 
-    // Add a new blank role row
-    const handleAddRole = () => {
-        const newId = roles.length > 0 ? Math.max(...roles.map(r => r.id)) + 1 : 1;
-        setRoles([...roles, { id: newId, name: '', slots: 1, description: '' }]);
-    };
+    const handleSaveChanges = async (event) => {
+        event.preventDefault();
 
-    // Delete a specific role row
-    const handleDeleteRole = (id) => {
-        setRoles(roles.filter(role => role.id !== id));
-    };
+        if (!token) {
+            setError("Admin token is missing. Please log in again.");
+            return;
+        }
 
-    // Save changes via HTTP PUT or PATCH configuration to the linked database schema
-    const handleSaveChanges = async (e) => {
-        e.preventDefault();
+        if (!id) {
+            setError("Event ID is missing.");
+            return;
+        }
 
-        const updatedPayload = { ...eventData, roles };
+        const updatedPayload = {
+            title: eventData.title.trim(),
+            location: eventData.location.trim(),
+            date: eventData.date,
+            category: eventData.category,
+            description: eventData.description.trim()
+        };
 
         try {
-            const response = await fetch(`/api/events/${id || 'mock-id'}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(updatedPayload)
-            });
+            setIsSaving(true);
+            setError("");
 
-            if (response.ok) {
-                alert("Successfully edited and persistent to DB!");
-                navigate("/admin/events");
-            } else {
-                alert("Error sending entity modifications parameters upstream.");
+            const response = await fetch(
+                `http://localhost:5000/api/admin/events/${id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify(updatedPayload)
+                }
+            );
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                console.error("Backend update response:", {
+                    status: response.status,
+                    data
+                });
+
+                throw new Error(
+                    data.detail ||
+                    data.message ||
+                    `Failed to update event. Status: ${response.status}`
+                );
             }
-        } catch (error) {
-            console.error("Transmission stack failure:", error);
-            alert("Database tracking error configuration exception handling channel.");
+
+            alert(data.message || "Event updated successfully!");
+            navigate("/admindashboard");
+        } catch (err) {
+            console.error("Save failure:", err);
+            setError(err.message);
+        } finally {
+            setIsSaving(false);
         }
     };
 
     const handleCancelChanges = () => {
-        navigate("/admin/events");
+        navigate("/admindashboard");
     };
 
     if (isLoading) {
-        return <div style={{ textItems: "center", padding: "100px", color: "#475569" }}>Retrieving Record Details from Database...</div>;
+        return (
+            <>
+                <Navbar />
+
+                <div
+                    style={{
+                        textAlign: "center",
+                        padding: "100px",
+                        color: "#475569"
+                    }}
+                >
+                    Retrieving event details...
+                </div>
+
+                <Footer />
+            </>
+        );
     }
 
     return (
@@ -117,174 +181,164 @@ function EditEvent() {
             <div className="edit-event-container">
                 <Navbar />
 
-                {/* Top Hero Banner Matching Create Event Layout */}
                 <div className="edit-event-hero">
                     <div className="edit-event-hero-container">
                         <button
                             type="button"
                             className="back-dashboard-btn"
-                            onClick={() => navigate("/admin/events")}
+                            onClick={() => navigate("/admindashboard")}
                         >
-                            ← Back to Events
+                            &lt; Back to Dashboard
                         </button>
-                        <h1 className="edit-event-hero-title">Edit Event</h1>
-                        <p className="edit-event-hero-subtitle">Update the details for "{eventData.title}"</p>
+
+                        <h1 className="edit-event-hero-title">
+                            Edit Event
+                        </h1>
+
+                        <p className="edit-event-hero-subtitle">
+                            Update the details for "
+                            {eventData.title || "Selected Event"}"
+                        </p>
                     </div>
                 </div>
 
                 <div className="edit-event-content">
-                    {/* Section 1: Event Information Card */}
+                    {error && (
+                        <div
+                            style={{
+                                marginBottom: "20px",
+                                padding: "14px",
+                                borderRadius: "8px",
+                                backgroundColor: "#fee2e2",
+                                color: "#991b1b"
+                            }}
+                        >
+                            {error}
+                        </div>
+                    )}
+
                     <form onSubmit={handleSaveChanges}>
                         <section className="form-card">
                             <h2>Event Information</h2>
 
                             <div className="form-group full-width">
-                                <label>Event Title</label>
+                                <label htmlFor="title">
+                                    Event Title
+                                </label>
+
                                 <input
+                                    id="title"
+                                    name="title"
                                     type="text"
                                     value={eventData.title}
-                                    onChange={(e) => setEventData({ ...eventData, title: e.target.value })}
+                                    onChange={handleInputChange}
                                     required
                                 />
                             </div>
 
                             <div className="form-row-2col">
                                 <div className="form-group">
-                                    <label>Date</label>
-                                    <input
-                                        type="text"
-                                        value={eventData.date}
-                                        onChange={(e) => setEventData({ ...eventData, date: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label>Time</label>
-                                    <input
-                                        type="text"
-                                        value={eventData.time}
-                                        onChange={(e) => setEventData({ ...eventData, time: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                            </div>
+                                    <label htmlFor="date">
+                                        Date
+                                    </label>
 
-                            <div className="form-row-2col">
-                                <div className="form-group">
-                                    <label>Location</label>
                                     <input
+                                        id="date"
+                                        name="date"
+                                        type="date"
+                                        value={eventData.date}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="location">
+                                        Location
+                                    </label>
+
+                                    <input
+                                        id="location"
+                                        name="location"
                                         type="text"
                                         value={eventData.location}
-                                        onChange={(e) => setEventData({ ...eventData, location: e.target.value })}
+                                        onChange={handleInputChange}
                                         required
                                     />
                                 </div>
-                                <div className="form-group">
-                                    <label>Category</label>
-                                    <select
-                                        value={eventData.category}
-                                        onChange={(e) => setEventData({ ...eventData, category: e.target.value })}
-                                    >
-                                        <option value="Technology">Technology</option>
-                                        <option value="Music">Music</option>
-                                        <option value="Business">Business</option>
-                                    </select>
-                                </div>
                             </div>
 
                             <div className="form-group full-width">
-                                <label>Description</label>
+                                <label htmlFor="category">
+                                    Category
+                                </label>
+
+                                <select
+                                    id="category"
+                                    name="category"
+                                    value={eventData.category}
+                                    onChange={handleInputChange}
+                                >
+                                    <option value="Technology">
+                                        Technology
+                                    </option>
+
+                                    <option value="Music">
+                                        Music
+                                    </option>
+
+                                    <option value="Business">
+                                        Business
+                                    </option>
+
+                                    <option value="General">
+                                        General
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div className="form-group full-width">
+                                <label htmlFor="description">
+                                    Description
+                                </label>
+
                                 <textarea
-                                    rows="4"
+                                    id="description"
+                                    name="description"
+                                    rows="5"
                                     value={eventData.description}
-                                    onChange={(e) => setEventData({ ...eventData, description: e.target.value })}
+                                    onChange={handleInputChange}
                                     required
                                 />
                             </div>
-
-                            <div className="form-group full-width">
-                                <label>Image URL</label>
-                                <input
-                                    type="text"
-                                    value={eventData.imageUrl}
-                                    onChange={(e) => setEventData({ ...eventData, imageUrl: e.target.value })}
-                                />
-                            </div>
-
-                            {/* Banner Preview Block */}
-                            {eventData.imageUrl && (
-                                <div className="image-preview-box">
-                                    <img src={eventData.imageUrl} alt="Event Preview" />
-                                </div>
-                            )}
                         </section>
 
-                        {/* Section 2: Role Requirements Card */}
-                        <section className="form-card role-section">
-                            <div className="role-card-header">
-                                <h2>Role Requirements</h2>
-                                <button type="button" className="add-role-btn" onClick={handleAddRole}>
-                                    <Plus size={16} /> Add Role
-                                </button>
-                            </div>
-
-                            <div className="roles-list">
-                                {roles.map((role, index) => (
-                                    <div key={role.id || index} className="role-row-item">
-                                        <div className="role-row-title-bar">
-                                            <h3>Role #{index + 1}</h3>
-                                            <button type="button" className="delete-role-btn" onClick={() => handleDeleteRole(role.id)}>
-                                                <Trash2 size={16} />
-                                            </button>
-                                        </div>
-
-                                        <div className="role-fields-grid">
-                                            <div className="form-group name-field">
-                                                <label>Role Name</label>
-                                                <input
-                                                    type="text"
-                                                    value={role.name}
-                                                    onChange={(e) => handleRoleChange(role.id, 'name', e.target.value)}
-                                                    required
-                                                />
-                                            </div>
-                                            <div className="form-group slots-field">
-                                                <label>Total Slots</label>
-                                                <input
-                                                    type="number"
-                                                    value={role.slots}
-                                                    min={1}
-                                                    onChange={(e) => handleRoleChange(role.id, 'slots', e.target.value)}
-                                                    required
-                                                />
-                                            </div>
-                                            <div className="form-group desc-field">
-                                                <label>Description</label>
-                                                <input
-                                                    type="text"
-                                                    value={role.description}
-                                                    onChange={(e) => handleRoleChange(role.id, 'description', e.target.value)}
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-
-                        {/* Form Action Buttons Footer */}
                         <div className="form-actions-footer">
-                            <button type="button" className="cancel-btn" onClick={handleCancelChanges}>
+                            <button
+                                type="button"
+                                className="cancel-btn"
+                                onClick={handleCancelChanges}
+                                disabled={isSaving}
+                            >
                                 Cancel
                             </button>
-                            <button type="submit" className="save-changes-btn">
-                                <Save size={16} /> Save Changes
+
+                            <button
+                                type="submit"
+                                className="save-changes-btn"
+                                disabled={isSaving}
+                            >
+                                <Save size={16} />
+
+                                {isSaving
+                                    ? "Saving..."
+                                    : "Save Changes"}
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
+
             <Footer />
         </>
     );
